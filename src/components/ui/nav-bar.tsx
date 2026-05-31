@@ -162,7 +162,7 @@ export const NavBar = () => {
         layout
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         animate={{
-          borderRadius: open ? "24px" : "999px",
+          borderRadius: open ? 24 : 22,
           backgroundColor: open ? "#eceeed" : "transparent",
         }}
         className={`absolute top-0 left-1/2 -translate-x-1/2 overflow-hidden ${
