@@ -8,9 +8,8 @@ import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { NavBar } from "@/components/ui/nav-bar";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { ResumePreview } from "@/components/ui/resume-preview";
-import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
 import { motion } from "framer-motion";
-import { Github, Linkedin, ExternalLink, Code2, Sparkles, X } from "lucide-react";
+import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 type Project = {
@@ -26,36 +25,47 @@ type Project = {
 const PROJECTS: Project[] = [
     {
         title: "OneCall AI Onboarding",
-        description: "A high-performance vendor onboarding system leveraging AI to automate data extraction from identity documents.",
-        tech: ["React", "Python", "Tesseract.js", "Django"],
+        description: "Insurance automation platform for onboarding workflows including biometric verification, interview processing, and automated document generation.",
+        tech: ["Django", "Python", "Next.js", "MySQL", "REST API", "JWT Auth"],
         highlights: [
-            "Streamlined onboarding for 300+ vendors",
-            "Reduced manual data entry time by 70%",
-            "Implemented real-time AI document scanning"
+            "AI face scan, BMI calculator & video/audio interview workflows",
+            "Biometric verification & automated document generation",
+            "Health verification system for insurance onboarding"
         ],
-        logo: "/logos/images.jpg"
+        logo: "/logos/onecall.jpg"
     },
     {
         title: "MyFinalyst",
-        description: "Financial insights platform that translates complex fiscal data into actionable, human-readable intelligence.",
-        tech: ["Next.js", "TypeScript", "SQL", "Chart.js"],
+        description: "SaaS financial platform integrating Tally ERP, Tally Prime & Microsoft Business Central for automated financial sync and reporting.",
+        tech: ["React", "Redux", "Java Spring Boot", "MongoDB", "REST APIs"],
         highlights: [
-            "Automated translation of balance sheets",
-            "Interactive data visualization suite",
-            "Optimized query performance for large datasets"
+            "Integrated Tally ERP, Tally Prime & MS Business Central",
+            "Built responsive dashboards & financial reporting modules",
+            "Modules for Loans, Receivables & Accounting Policies"
         ],
         logo: "/logos/myfinalyst.png"
     },
     {
         title: "Hirelines",
-        description: "End-to-end recruitment platform focused on optimizing the hiring pipeline for small to medium enterprises.",
-        tech: ["React", "Node.js", "PostgreSQL", "Tailwind"],
+        description: "SaaS recruitment platform automating screening, coding assessments, interviews, and candidate workflows for enterprises.",
+        tech: ["Django", "REST APIs", "MySQL", "HTML", "JavaScript", "AWS"],
         highlights: [
-            "Seamless applicant tracking system",
-            "Integrated interview scheduling",
-            "Custom workflow builder for HR teams"
+            "Automated screening, coding assessments & interview scheduling",
+            "Integrated scoring systems & hiring workflow APIs",
+            "Managed AWS EC2, PM2, Nginx & CloudFront deployments"
         ],
         logo: "/logos/hireLines.svg"
+    },
+    {
+        title: "Gyftport",
+        description: "Gift card marketplace platform with cross-platform integrations, async order processing, and seamless partner API connectivity.",
+        tech: ["Django", "Next.js", "PostgreSQL", "GraphQL", "Redis", "RabbitMQ", "Celery", "AWS"],
+        highlights: [
+            "Led backend & web platform as Technical Lead",
+            "Built async order processing with Celery & RabbitMQ",
+            "Developed GraphQL & REST APIs for third-party integrations"
+        ],
+        logo: "/logos/gyftport.png"
     }
 ];
 
@@ -227,13 +237,6 @@ export function LandingPage() {
                                         <ul className="text-xs text-white/50 space-y-1 list-disc list-inside mb-4">
                                             {project.highlights.map(h => <li key={h}>{h}</li>)}
                                         </ul>
-                                        <div className="mt-4 pt-4 border-t border-white/5 w-full">
-                                            <a href={project.link || "#"} target="_blank" rel="noreferrer" className="block w-full">
-                                                <GlassButton size="sm" className="w-full text-xs" contentClassName="flex items-center justify-center gap-2">
-                                                    View Project <ExternalLink size={14} />
-                                                </GlassButton>
-                                            </a>
-                                        </div>
                                     </div>
                                 </GlassCard>
                             ))}
