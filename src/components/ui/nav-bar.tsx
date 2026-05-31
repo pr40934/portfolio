@@ -194,7 +194,7 @@ export const NavBar = () => {
               </div>
 
               {/* Menu ↔ Close slide */}
-              <div className="relative h-[14px] overflow-hidden w-10">
+              <div className="relative h-[14px] overflow-hidden w-[44px]">
                 <motion.span
                   animate={{ y: open ? "-100%" : "0%" }}
                   transition={{ duration: 0.22, ease: "easeInOut" }}
