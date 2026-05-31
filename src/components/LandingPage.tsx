@@ -105,7 +105,7 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle?: string }
 // ── Main Page ───────────────────────────────────────────────────────────────
 export function LandingPage() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [navScrolled, setNavScrolled] = useState(false);
+    const [_navScrolled, setNavScrolled] = useState(false);
     const [showResume, setShowResume] = useState(false);
     const [selectedResumeFile, setSelectedResumeFile] = useState<File | null>(null);
 
