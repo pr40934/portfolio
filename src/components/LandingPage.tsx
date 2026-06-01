@@ -8,6 +8,8 @@ import { ContainerTextFlip } from "@/components/ui/container-text-flip";
 import { NavBar } from "@/components/ui/nav-bar";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { ResumePreview } from "@/components/ui/resume-preview";
+import { RevealCard } from "@/components/ui/reveal-card";
+import { RevealGrid } from "@/components/ui/reveal-grid";
 import { motion } from "framer-motion";
 import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 
@@ -203,9 +205,13 @@ export function LandingPage() {
                     {/* Projects Section */}
                     <section id="projects">
                         <SectionHeader title="Selected Work" subtitle="Innovative solutions for complex problems." />
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <RevealGrid maskSize={280} className="grid grid-cols-1 md:grid-cols-2">
                             {PROJECTS.map((project, i) => (
-                                <GlassCard key={project.title} className="flex flex-col gap-4">
+                                <RevealCard
+                                    key={project.title}
+                                    maskSize={280}
+                                    className="flex flex-col gap-4 bg-white/5 backdrop-blur-md p-6"
+                                >
                                     <div className="flex justify-between items-start">
                                         <div className="w-12 h-12 bg-white/10 rounded-xl overflow-hidden flex items-center justify-center p-2 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
                                             {project.logo ? (
@@ -238,9 +244,9 @@ export function LandingPage() {
                                             {project.highlights.map(h => <li key={h}>{h}</li>)}
                                         </ul>
                                     </div>
-                                </GlassCard>
+                                </RevealCard>
                             ))}
-                        </div>
+                        </RevealGrid>
                     </section>
 
                     {/* Experience Section */}
