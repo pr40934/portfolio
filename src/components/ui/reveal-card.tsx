@@ -34,7 +34,6 @@ export function RevealCard({
                     opacity: 0,
                     transition: "opacity 0.25s ease",
                     border: `1px solid ${borderColor}`,
-                    backgroundColor: glowColor,
                     WebkitMaskImage:
                         "radial-gradient(circle closest-side, white 20%, transparent 100%)",
                     maskImage:
