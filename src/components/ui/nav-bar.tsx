@@ -162,7 +162,7 @@ export const NavBar = () => {
         layout
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         animate={{
-          borderRadius: open ? 24 : 22,
+          borderRadius: 24,
           backgroundColor: open ? "#eceeed" : "transparent",
         }}
         className={`absolute top-0 left-1/2 -translate-x-1/2 overflow-hidden ${
@@ -170,7 +170,7 @@ export const NavBar = () => {
         }`}
       >
         {/* ── Pill row — always at top of container ── */}
-        <motion.div layout className={open ? "p-3" : ""} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
+        <div className="p-3 w-fit">
           <div className="flex items-center bg-white rounded-full h-11 overflow-hidden border border-black/10 shadow-xl">
 
             {/* Menu / Close Button */}
@@ -224,13 +224,13 @@ export const NavBar = () => {
             </div> */}
 
             {/* Scroll % */}
-            <div className="mx-1.5 h-7 w-14 bg-black rounded-full flex items-center justify-center ml-auto">
+            <div className="mx-1.5 h-7 w-14 bg-black rounded-full flex items-center justify-center">
               <span className="text-[11px] font-Turbine font-black tracking-[0.15em] text-white tabular-nums">
                 {scrollPct}%
               </span>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* ── Panel content — fades in inside the same container ── */}
         <AnimatePresence>
