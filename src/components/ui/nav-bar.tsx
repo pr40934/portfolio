@@ -248,7 +248,7 @@ export const NavBar = () => {
                 <nav className="flex flex-col">
                   {navLinks.map((link) => (
                     <HoverLink key={link.href} href={link.href} onClick={close}
-                      className="text-[1.75rem] font-Case font-bold text-black py-1 leading-tight">
+                      className="text-[1.75rem] font-Case font-bold text-[#052415] py-1 leading-tight">
                       {link.label}
                     </HoverLink>
                   ))}
@@ -263,7 +263,7 @@ export const NavBar = () => {
                 <div className="flex flex-col gap-1">
                   {otherLinks.map((link) => (
                     <HoverLink key={link.label} href={link.href} onClick={close}
-                      className="text-sm font-Case font-bold text-black py-0.5 leading-tight">
+                      className="text-sm font-Case font-bold text-[#052415] py-0.5 leading-tight">
                       {link.label}
                     </HoverLink>
                   ))}
@@ -278,7 +278,7 @@ export const NavBar = () => {
                 <div className="flex flex-col gap-1">
                   {socialLinks.map((link) => (
                     <HoverLink key={link.href} href={link.href} onClick={close}
-                      className="text-sm font-Case font-bold text-black py-0.5 leading-tight">
+                      className="text-sm font-Case font-bold text-[#052415] py-0.5 leading-tight">
                       {link.label}
                     </HoverLink>
                   ))}
