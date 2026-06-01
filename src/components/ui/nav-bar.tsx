@@ -189,7 +189,7 @@ export const NavBar = () => {
                 <motion.span
                   animate={open ? { rotate: -45, y: -4.5 } : { rotate: 0, y: 0 }}
                   transition={{ duration: 0.22, ease: "easeInOut" }}
-                  className="block absolute bottom-0 left-0 w-full h-px bg-black origin-center"
+                  className="block absolute bottom-0 left-0 w-full h-[2px] bg-black origin-center"
                 />
               </div>
 
