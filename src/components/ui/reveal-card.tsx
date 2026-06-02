@@ -12,8 +12,7 @@ export function RevealCard({
     children,
     className = "",
     maskSize = 220,
-    borderColor = "hsla(160, 84%, 39%, 0.6)",
-    glowColor = "hsla(160, 84%, 39%, 0.08)",
+    borderColor = "hsla(160, 84%, 55%, 1)",
 }: RevealCardProps) {
     return (
         <div
@@ -34,7 +33,7 @@ export function RevealCard({
                     opacity: 0,
                     transition: "opacity 0.25s ease",
                     border: `1px solid ${borderColor}`,
-                    backgroundColor: glowColor,
+                    boxShadow: `0 0 12px 2px hsla(160, 84%, 55%, 0.45), inset 0 0 12px 2px hsla(160, 84%, 55%, 0.15)`,
                     WebkitMaskImage:
                         "radial-gradient(circle closest-side, white 20%, transparent 100%)",
                     maskImage:

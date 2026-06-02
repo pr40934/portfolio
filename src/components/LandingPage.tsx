@@ -213,7 +213,7 @@ export function LandingPage() {
                                     className="flex flex-col gap-4 bg-white/5 backdrop-blur-md p-6"
                                 >
                                     <div className="flex justify-between items-start">
-                                        <div className="w-12 h-12 bg-white/10 rounded-xl overflow-hidden flex items-center justify-center p-2 border border-white/10 group-hover:border-emerald-500/50 transition-colors">
+                                        <div className="w-12 h-12 overflow-hidden flex items-center justify-center">
                                             {project.logo ? (
                                                 <img 
                                                     src={project.logo} 
