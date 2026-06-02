@@ -74,9 +74,6 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
     // Map scroll progress to a subtle vertical float
     const ribbonY = useTransform(scrollYProgress, [0, 1], ["-5vh", "5vh"]);
 
-    // Fade ribbon in/out when scrolling through section
-    const ribbonOpacity = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0, 0.85, 0.85, 0]);
-
     // Bind dashed line flow directly to scroll
     const dashOffset = useTransform(scrollYProgress, [0, 1], [0, -800]);
 
@@ -113,8 +110,8 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
     // Horizontal winding path for Desktop
     const desktopPath = "M 100,500 C 400,100 800,900 1400,500 C 1800,100 2100,900 2500,500";
     
-    // Vertical looping path for Mobile (matches user sketch)
-    const mobilePath = "M -100,100 C 800,100 900,800 500,1100 C 100,1400 200,1800 400,1500 C 600,1200 800,2000 1100,2300";
+    // Vertical looping path for Mobile (perfect 118-degree crossing to prevent overlap blobs)
+    const mobilePath = "M -100,100 C 800,100 600,800 500,1200 C 400,1600 100,1300 500,1200 C 900,1100 900,1800 1000,2400";
 
     return (
         <section
