@@ -215,14 +215,14 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                         >
                                             {/* Progress / Year marker like high-end portfolio */}
                                             <span className={`text-sm md:text-base font-Turbine transition-all duration-700 w-16 shrink-0 tracking-wider ${
-                                                isActive ? "text-emerald-500 font-black" : "text-white/10"
+                                                isActive ? "text-white font-black" : "text-white/10"
                                             }`}>
                                                 ({idx === 0 ? "35" : "38"})
                                             </span>
 
-                                            {/* Massive Typography Role Title */}
+                                            {/* Typography Role Title */}
                                             <h3
-                                                className={`text-4xl xl:text-6xl font-black font-Case tracking-tighter uppercase transition-all duration-700 ${
+                                                className={`text-3xl xl:text-4xl font-black font-Case tracking-widest uppercase transition-all duration-700 ${
                                                     isActive
                                                         ? "text-white scale-100"
                                                         : "text-white/10 group-hover:text-white/30"
@@ -235,7 +235,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                             {isActive && (
                                                 <motion.div
                                                     layoutId="activeBar"
-                                                    className="absolute left-[-17px] top-0 bottom-0 w-[3px] bg-emerald-500"
+                                                    className="absolute left-[-17px] top-0 bottom-0 w-[3px] bg-white"
                                                     transition={{ type: "spring", stiffness: 100, damping: 18 }}
                                                 />
                                             )}
@@ -285,11 +285,11 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col sm:items-end gap-1.5 shrink-0">
-                                                    <span className="text-[9px] font-Turbine font-black tracking-[0.2em] text-emerald-500 uppercase px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 w-fit">
+                                                    <span className="text-[9px] font-Turbine font-black tracking-[0.2em] text-white uppercase px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 w-fit">
                                                         {EXPERIENCE_DATA[activeIndex].type}
                                                     </span>
-                                                    <span className="text-[10px] font-Turbine font-bold text-zinc-400 tracking-wider flex items-center gap-1.5 mt-1">
-                                                        <MapPin size={11} className="text-zinc-500" />
+                                                    <span className="text-[10px] font-Turbine font-bold text-white tracking-wider flex items-center gap-1.5 mt-1">
+                                                        <MapPin size={11} />
                                                         {EXPERIENCE_DATA[activeIndex].location}
                                                     </span>
                                                 </div>
@@ -297,23 +297,23 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
 
                                             {/* Core Description */}
                                             <div className="flex flex-col gap-3">
-                                                <div className="flex items-center gap-2 text-[10px] font-Turbine font-bold text-zinc-500 tracking-widest uppercase">
+                                                <div className="flex items-center gap-2 text-[10px] font-Turbine font-bold text-white tracking-widest uppercase">
                                                     <Calendar size={11} />
                                                     <span>{EXPERIENCE_DATA[activeIndex].duration}</span>
                                                 </div>
-                                                <p className="text-sm md:text-base text-zinc-400 font-Turbine leading-relaxed font-light">
+                                                <p className="text-sm md:text-base text-white font-Turbine leading-relaxed font-light">
                                                     {EXPERIENCE_DATA[activeIndex].description}
                                                 </p>
                                             </div>
 
                                             {/* Key Achievements */}
                                             <div className="flex flex-col gap-3">
-                                                <h5 className="text-[9px] font-Turbine font-black tracking-[0.3em] text-zinc-500 uppercase">
+                                                <h5 className="text-[9px] font-Turbine font-black tracking-[0.3em] text-white uppercase">
                                                     Selected Achievements
                                                 </h5>
                                                 <ul className="space-y-3">
                                                     {EXPERIENCE_DATA[activeIndex].achievements.map((ach, i) => (
-                                                        <li key={i} className="flex items-start gap-3.5 text-xs md:text-sm text-zinc-300 font-Turbine leading-relaxed font-light">
+                                                        <li key={i} className="flex items-start gap-3.5 text-xs md:text-sm text-white font-Turbine leading-relaxed font-light">
                                                             <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0 shadow-[0_0_8px_#10b981]" />
                                                             <span>{ach}</span>
                                                         </li>
@@ -379,32 +379,32 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                         </div>
                                     </div>
                                     <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-2 shrink-0">
-                                        <span className="text-[8px] font-Turbine font-black tracking-[0.2em] text-emerald-500 uppercase px-2.5 py-1 rounded-full border border-emerald-500/25 bg-emerald-500/5">
+                                        <span className="text-[8px] font-Turbine font-black tracking-[0.2em] text-white uppercase px-2.5 py-1 rounded-full border border-emerald-500/25 bg-emerald-500/5">
                                             {job.type}
                                         </span>
-                                        <span className="text-[9px] font-Turbine font-bold text-zinc-400 tracking-wider flex items-center gap-1.5">
-                                            <MapPin size={9} className="text-zinc-500" />
+                                        <span className="text-[9px] font-Turbine font-bold text-white tracking-wider flex items-center gap-1.5">
+                                            <MapPin size={9} />
                                             {job.location}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col gap-4">
-                                    <div className="flex items-center gap-2 text-[10px] font-Turbine font-bold text-zinc-500 tracking-widest uppercase">
+                                    <div className="flex items-center gap-2 text-[10px] font-Turbine font-bold text-white tracking-widest uppercase">
                                         <Calendar size={11} />
                                         <span>{job.duration}</span>
                                     </div>
-                                    <p className="text-xs md:text-sm text-zinc-400 font-Turbine leading-relaxed font-light">
+                                    <p className="text-xs md:text-sm text-white font-Turbine leading-relaxed font-light">
                                         {job.description}
                                     </p>
 
                                     <div className="flex flex-col gap-2">
-                                        <h5 className="text-[8px] font-Turbine font-black tracking-[0.25em] text-zinc-500 uppercase">
+                                        <h5 className="text-[8px] font-Turbine font-black tracking-[0.25em] text-white uppercase">
                                             Selected Achievements
                                         </h5>
                                         <ul className="space-y-2.5">
                                             {job.achievements.map((ach, i) => (
-                                                <li key={i} className="flex items-start gap-2.5 text-[11px] md:text-xs text-zinc-300 font-Turbine leading-relaxed font-light">
+                                                <li key={i} className="flex items-start gap-2.5 text-[11px] md:text-xs text-white font-Turbine leading-relaxed font-light">
                                                     <span className="inline-block w-1 h-1 rounded-full bg-emerald-500 mt-1.5 shrink-0 shadow-[0_0_6px_#10b981]" />
                                                     <span>{ach}</span>
                                                 </li>
