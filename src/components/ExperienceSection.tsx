@@ -110,8 +110,8 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
     // Horizontal winding path for Desktop
     const desktopPath = "M 100,500 C 400,100 800,900 1400,500 C 1800,100 2100,900 2500,500";
     
-    // Vertical looping path for Mobile (pushed down to clear the header text)
-    const mobilePath = "M -100,800 C 800,800 600,1100 500,1500 C 400,1900 100,1600 500,1500 C 900,1400 900,2000 1000,2400";
+    // Vertical looping path for Mobile (massive open loop, exits smoothly horizontally out the right side)
+    const mobilePath = "M -100,800 C 600,800 800,1200 500,1600 C 50,2200 -100,1150 500,1600 C 900,1900 1100,2100 1200,2100";
 
     return (
         <section
