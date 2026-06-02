@@ -123,7 +123,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
             <div className="sticky top-0 h-screen w-full flex flex-col justify-center bg-transparent">
                 
                 {/* ── Giant Winding Emerald Ribbon (Background) ── */}
-                <div className="absolute inset-y-0 w-[100vw] left-[50%] -translate-x-[50%] z-0 pointer-events-none select-none">
+                <div className="absolute inset-y-0 w-[100vw] left-[50%] -translate-x-[50%] z-0 pointer-events-none select-none overflow-hidden">
                     <motion.div
                         style={{ x: ribbonX, y: ribbonY }}
                         className="absolute w-full h-full top-0 left-0 flex items-center"
