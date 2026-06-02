@@ -110,8 +110,8 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
     // Horizontal winding path for Desktop
     const desktopPath = "M 100,500 C 400,100 800,900 1400,500 C 1800,100 2100,900 2500,500";
     
-    // Vertical looping path for Mobile (perfect 118-degree crossing to prevent overlap blobs)
-    const mobilePath = "M -100,100 C 800,100 600,800 500,1200 C 400,1600 100,1300 500,1200 C 900,1100 900,1800 1000,2400";
+    // Vertical looping path for Mobile (perfect 118-degree crossing, pushed down to prevent top cutoff)
+    const mobilePath = "M -100,400 C 800,400 600,800 500,1200 C 400,1600 100,1300 500,1200 C 900,1100 900,1800 1000,2400";
 
     return (
         <section
@@ -192,28 +192,27 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                 vectorEffect="non-scaling-stroke"
                                 style={{ pathLength: ribbonPathLength }}
                             />
-                            <motion.path
-                                d={mobilePath}
-                                fill="none"
-                                stroke="#ffffff"
-                                strokeWidth="4"
-                                strokeLinecap="round"
-                                strokeDasharray="18 30"
-                                opacity="0.6"
-                                vectorEffect="non-scaling-stroke"
-                                style={{ 
-                                    pathLength: ribbonPathLength,
-                                    strokeDashoffset: dashOffset 
-                                }}
-                            />
+                                <motion.path
+                                    d={mobilePath}
+                                    fill="none"
+                                    stroke="#ffffff"
+                                    strokeWidth="4"
+                                    strokeLinecap="round"
+                                    strokeDasharray="18 30"
+                                    opacity="0.6"
+                                    vectorEffect="non-scaling-stroke"
+                                    style={{ 
+                                        pathLength: ribbonPathLength
+                                    }}
+                                />
                         </svg>
                     </motion.div>
                 </div>
 
                 {/* ── Content Container ── */}
-                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col gap-6 md:gap-16">
+                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col gap-4 md:gap-16 mt-16 md:mt-0">
                     {/* Cinematic Widescreen Header */}
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1 md:gap-2">
                         <span className="text-[10px] md:text-xs font-Turbine tracking-[0.6em] text-white/60 uppercase">
                             Professional Path
                         </span>
@@ -223,10 +222,10 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                     </div>
 
                     {/* ── Unified Layout (Desktop & Mobile) ── */}
-                    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-12 xl:gap-20 items-start lg:items-center w-full">
+                    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 md:gap-6 lg:gap-12 xl:gap-20 items-start lg:items-center w-full">
                         
                         {/* Top/Left Column: Interactive Typographic Milestones */}
-                        <div className="w-full lg:col-span-5 flex flex-col gap-4 lg:gap-8">
+                        <div className="w-full lg:col-span-5 flex flex-col gap-2 lg:gap-8">
                             <div className="flex flex-col relative pl-4 border-l border-zinc-900/60">
                                 {EXPERIENCE_DATA.map((job, idx) => {
                                     const isActive = activeIndex === idx;
@@ -234,7 +233,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                         <div
                                             key={job.company}
                                             onClick={() => handleItemClick(idx)}
-                                            className="group relative py-4 lg:py-8 cursor-pointer transition-all duration-700 flex items-center gap-4 lg:gap-8"
+                                            className="group relative py-2 lg:py-8 cursor-pointer transition-all duration-700 flex items-center gap-3 lg:gap-8"
                                         >
                                             {/* Progress / Year marker like high-end portfolio */}
                                             <span className={`text-xs md:text-base font-Turbine transition-all duration-700 w-12 md:w-16 shrink-0 tracking-wider ${
@@ -272,9 +271,9 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                         <div className="w-full lg:col-span-7 mt-4 lg:mt-0">
                             <div className="relative">
                                 {/* Ambient Glow */}
-                                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-emerald-500/10 to-transparent blur-2xl opacity-40 pointer-events-none select-none" />
+                                <div className="hidden md:block absolute -inset-1 rounded-3xl bg-gradient-to-r from-emerald-500/10 to-transparent blur-2xl opacity-40 pointer-events-none select-none" />
 
-                                <div className="relative overflow-hidden rounded-3xl border border-zinc-800/40 bg-zinc-950/20 backdrop-blur-xl p-6 md:p-8 xl:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.9)]">
+                                <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-zinc-800/40 bg-zinc-950/60 md:bg-zinc-950/20 backdrop-blur-md md:backdrop-blur-xl p-4 md:p-8 xl:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.9)]">
                                     <AnimatePresence mode="wait">
                                         <motion.div
                                             key={activeIndex}
