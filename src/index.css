@@ -150,7 +150,8 @@
   }
 
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply text-foreground overflow-x-hidden;
+    background-color: #052415;
   }
 }
 
@@ -201,45 +202,4 @@ a {
 a:hover {
   color: inherit;
 }
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  color: #052415;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 18px;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.button-main:hover {
-  box-shadow: 0 5px 8px 0 rgba(255, 255, 255, 0.332), 0 6px 20px 0 rgba(255, 255, 255, 0.332);
-}
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: inherit;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
-}
+
