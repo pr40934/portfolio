@@ -302,12 +302,7 @@ export function LandingPage() {
                     onChange={handleFileChange}
                 />
 
-                {/* Footer */}
-                <footer className="mt-auto py-12 border-t border-white/5 flex flex-col items-center gap-4 opacity-40">
-                    <p className="font-Turbine text-[10px] tracking-widest uppercase">
-                        © 2026 Pratap Raju • Crafted with UI-UX-Pro-Max
-                    </p>
-                </footer>
+
             </div>
         </ReactLenis>
     );
