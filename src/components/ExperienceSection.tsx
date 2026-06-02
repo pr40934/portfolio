@@ -110,8 +110,11 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
         });
     };
 
-    // Horizontal winding path starting far left, weaving across the screen, ending far right
-    const ribbonPath = "M 100,500 C 400,100 800,900 1400,500 C 1800,100 2100,900 2500,500";
+    // Horizontal winding path for Desktop
+    const desktopPath = "M 100,500 C 400,100 800,900 1400,500 C 1800,100 2100,900 2500,500";
+    
+    // Vertical looping path for Mobile (matches user sketch)
+    const mobilePath = "M -100,100 C 800,100 900,800 500,1100 C 100,1400 200,1800 400,1500 C 600,1200 800,2000 1100,2300";
 
     return (
         <section
@@ -128,39 +131,24 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                         style={{ x: ribbonX, y: ribbonY }}
                         className="absolute w-full h-full top-0 left-0 flex items-center"
                     >
+                        {/* ── DESKTOP RIBBON ── */}
                         <svg
                             viewBox="0 0 2400 1000"
                             preserveAspectRatio="none"
-                            className="w-[150%] h-[150%] -translate-x-[15%] shrink-0"
+                            className="w-[150%] h-[150%] -translate-x-[15%] shrink-0 hidden lg:block"
                         >
                             <defs>
-                                <linearGradient id="ribbon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <linearGradient id="desktop-ribbon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                     <stop offset="0%" stopColor="#34d399" stopOpacity="0.9" />
                                     <stop offset="50%" stopColor="#10b981" stopOpacity="1" />
                                     <stop offset="100%" stopColor="#064e3b" stopOpacity="0.9" />
                                 </linearGradient>
-                                <filter id="ribbon-glow" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feGaussianBlur stdDeviation="40" result="blur" />
-                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                </filter>
                             </defs>
-                            {/* Glowing back-lighting layer 
-                            <motion.path
-                                d={ribbonPath}
-                                fill="none"
-                                stroke="#10b981"
-                                strokeWidth="220"
-                                strokeLinecap="round"
-                                opacity="0.25"
-                                filter="url(#ribbon-glow)"
-                                vectorEffect="non-scaling-stroke"
-                                style={{ pathLength: ribbonPathLength }}
-                            /> */}
                             {/* Main thick organic ribbon body */}
                             <motion.path
-                                d={ribbonPath}
+                                d={desktopPath}
                                 fill="none"
-                                stroke="url(#ribbon-gradient)"
+                                stroke="url(#desktop-ribbon-gradient)"
                                 strokeWidth="150"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -169,12 +157,51 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                             />
                             {/* Flowing white digital pathway overlay */}
                             <motion.path
-                                d={ribbonPath}
+                                d={desktopPath}
                                 fill="none"
                                 stroke="#ffffff"
                                 strokeWidth="3"
                                 strokeLinecap="round"
                                 strokeDasharray="14 26"
+                                opacity="0.6"
+                                vectorEffect="non-scaling-stroke"
+                                style={{ 
+                                    pathLength: ribbonPathLength,
+                                    strokeDashoffset: dashOffset 
+                                }}
+                            />
+                        </svg>
+
+                        {/* ── MOBILE RIBBON ── */}
+                        <svg
+                            viewBox="0 0 1000 2400"
+                            preserveAspectRatio="none"
+                            className="w-[120%] h-[120%] -translate-x-[10%] shrink-0 block lg:hidden"
+                        >
+                            <defs>
+                                <linearGradient id="mobile-ribbon-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stopColor="#34d399" stopOpacity="0.9" />
+                                    <stop offset="50%" stopColor="#10b981" stopOpacity="1" />
+                                    <stop offset="100%" stopColor="#064e3b" stopOpacity="0.9" />
+                                </linearGradient>
+                            </defs>
+                            <motion.path
+                                d={mobilePath}
+                                fill="none"
+                                stroke="url(#mobile-ribbon-gradient)"
+                                strokeWidth="150"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                vectorEffect="non-scaling-stroke"
+                                style={{ pathLength: ribbonPathLength }}
+                            />
+                            <motion.path
+                                d={mobilePath}
+                                fill="none"
+                                stroke="#ffffff"
+                                strokeWidth="4"
+                                strokeLinecap="round"
+                                strokeDasharray="18 30"
                                 opacity="0.6"
                                 vectorEffect="non-scaling-stroke"
                                 style={{ 
