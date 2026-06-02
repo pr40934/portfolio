@@ -10,7 +10,7 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { ResumePreview } from "@/components/ui/resume-preview";
 import { RevealCard } from "@/components/ui/reveal-card";
 import { RevealGrid } from "@/components/ui/reveal-grid";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion } from "framer-motion";
 import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { ReactLenis } from 'lenis/react';
