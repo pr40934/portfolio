@@ -187,7 +187,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                 </div>
 
                 {/* ── Content Container ── */}
-                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col gap-10 md:gap-16">
+                <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full flex flex-col gap-6 md:gap-16">
                     {/* Cinematic Widescreen Header */}
                     <div className="flex flex-col gap-2">
                         <span className="text-[10px] md:text-xs font-Turbine tracking-[0.6em] text-white/60 uppercase">
@@ -198,12 +198,11 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                         </h2>
                     </div>
 
-                    {/* ── Desktop Layout (lg and above) ── */}
-                    {/* Fixed compiler breakpoint ordering issue using max-lg:hidden */}
-                    <div className="grid grid-cols-12 gap-12 xl:gap-20 items-center w-full max-lg:hidden">
+                    {/* ── Unified Layout (Desktop & Mobile) ── */}
+                    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-12 xl:gap-20 items-start lg:items-center w-full">
                         
-                        {/* Left Column: Massive Interactive Typographic Milestones */}
-                        <div className="col-span-5 flex flex-col gap-8">
+                        {/* Top/Left Column: Interactive Typographic Milestones */}
+                        <div className="w-full lg:col-span-5 flex flex-col gap-4 lg:gap-8">
                             <div className="flex flex-col relative pl-4 border-l border-zinc-900/60">
                                 {EXPERIENCE_DATA.map((job, idx) => {
                                     const isActive = activeIndex === idx;
@@ -211,10 +210,10 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                         <div
                                             key={job.company}
                                             onClick={() => handleItemClick(idx)}
-                                            className="group relative py-8 cursor-pointer transition-all duration-700 flex items-center gap-8"
+                                            className="group relative py-4 lg:py-8 cursor-pointer transition-all duration-700 flex items-center gap-4 lg:gap-8"
                                         >
                                             {/* Progress / Year marker like high-end portfolio */}
-                                            <span className={`text-sm md:text-base font-Turbine transition-all duration-700 w-16 shrink-0 tracking-wider ${
+                                            <span className={`text-xs md:text-base font-Turbine transition-all duration-700 w-12 md:w-16 shrink-0 tracking-wider ${
                                                 isActive ? "text-white font-black" : "text-white/10"
                                             }`}>
                                                 ({idx === 0 ? "35" : "38"})
@@ -222,7 +221,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
 
                                             {/* Typography Role Title */}
                                             <h3
-                                                className={`text-3xl xl:text-4xl font-black font-Case tracking-widest uppercase transition-all duration-700 ${
+                                                className={`text-xl md:text-3xl xl:text-4xl font-black font-Case tracking-widest uppercase transition-all duration-700 ${
                                                     isActive
                                                         ? "text-white scale-100"
                                                         : "text-white/10 group-hover:text-white/30"
@@ -245,13 +244,13 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                             </div>
                         </div>
 
-                        {/* Right Column: Premium Animated Detail Card */}
-                        <div className="col-span-7">
+                        {/* Bottom/Right Column: Premium Animated Detail Card */}
+                        <div className="w-full lg:col-span-7 mt-4 lg:mt-0">
                             <div className="relative">
                                 {/* Ambient Glow */}
                                 <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-emerald-500/10 to-transparent blur-2xl opacity-40 pointer-events-none select-none" />
 
-                                <div className="relative overflow-hidden rounded-3xl border border-zinc-800/40 bg-zinc-950/20 backdrop-blur-xl p-8 xl:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.9)]">
+                                <div className="relative overflow-hidden rounded-3xl border border-zinc-800/40 bg-zinc-950/20 backdrop-blur-xl p-6 md:p-8 xl:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.9)]">
                                     <AnimatePresence mode="wait">
                                         <motion.div
                                             key={activeIndex}
@@ -344,93 +343,6 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                         </div>
                     </div>
 
-                    {/* ── Tablet and Mobile Layout (lg:hidden) ── */}
-                    {/* Renders as continuous stack inline with vertical weaving ribbon */}
-                    <div className="flex flex-col gap-8 lg:hidden w-full overflow-y-auto max-h-[60vh] pr-2">
-                        {EXPERIENCE_DATA.map((job, idx) => (
-                            <motion.div
-                                key={job.company}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-5%" }}
-                                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                className="relative overflow-hidden rounded-2xl border border-zinc-800/50 bg-[#060606]/95 backdrop-blur-md p-6 shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
-                            >
-                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-zinc-900/60 mb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-center p-2 shrink-0">
-                                            {job.logo.startsWith("/") ? (
-                                                <img
-                                                    src={job.logo}
-                                                    alt={`${job.company} logo`}
-                                                    className="w-full h-full object-contain filter invert opacity-80"
-                                                />
-                                            ) : (
-                                                <span className="text-xl">{job.logo}</span>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <h3 className="text-lg md:text-xl font-black font-Case tracking-tight text-white leading-tight">
-                                                {job.role}
-                                            </h3>
-                                            <p className="text-sm font-Case font-bold text-white/60 mt-0.5">
-                                                {job.company}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-2 shrink-0">
-                                        <span className="text-[8px] font-Turbine font-black tracking-[0.2em] text-white uppercase px-2.5 py-1 rounded-full border border-emerald-500/25 bg-emerald-500/5">
-                                            {job.type}
-                                        </span>
-                                        <span className="text-[9px] font-Turbine font-bold text-white tracking-wider flex items-center gap-1.5">
-                                            <MapPin size={9} />
-                                            {job.location}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col gap-4">
-                                    <div className="flex items-center gap-2 text-[10px] font-Turbine font-bold text-white tracking-widest uppercase">
-                                        <Calendar size={11} />
-                                        <span>{job.duration}</span>
-                                    </div>
-                                    <p className="text-xs md:text-sm text-white font-Turbine leading-relaxed font-light">
-                                        {job.description}
-                                    </p>
-
-                                    <div className="flex flex-col gap-2">
-                                        <h5 className="text-[8px] font-Turbine font-black tracking-[0.25em] text-white uppercase">
-                                            Selected Achievements
-                                        </h5>
-                                        <ul className="space-y-2.5">
-                                            {job.achievements.map((ach, i) => (
-                                                <li key={i} className="flex items-start gap-2.5 text-[11px] md:text-xs text-white font-Turbine leading-relaxed font-light">
-                                                    <span className="inline-block w-1 h-1 rounded-full bg-emerald-500 mt-1.5 shrink-0 shadow-[0_0_6px_#10b981]" />
-                                                    <span>{ach}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="flex flex-col gap-2 pt-3 border-t border-zinc-900/60">
-                                        <h5 className="text-[8px] font-Turbine font-black tracking-[0.25em] text-zinc-500 uppercase">
-                                            Technologies Used
-                                        </h5>
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {job.tech.map((tag) => (
-                                                <span
-                                                    key={tag}
-                                                    className="text-[8px] font-Turbine font-bold tracking-wider uppercase bg-zinc-950 border border-zinc-800 text-zinc-400 px-2 py-0.5 rounded"
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
                 </div>
             </div>
         </section>
