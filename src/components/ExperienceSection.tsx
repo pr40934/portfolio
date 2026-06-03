@@ -107,8 +107,8 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
         });
     };
 
-    // Horizontal winding path for Desktop
-    const desktopPath = "M 100,500 C 400,100 800,900 1400,500 C 1800,100 2100,900 2500,500";
+    // Hyper-curvy winding path for Desktop (amplified original sine-wave for much deeper swoops)
+    const desktopPath = "M -100,500 C 400,-200 800,1200 1300,500 C 1800,-200 2200,1200 2700,500";
     
     // Vertical looping path for Mobile (massive open loop, exits smoothly horizontally out the right side)
     const mobilePath = "M -100,800 C 600,800 800,1200 500,1600 C 50,2200 -100,1150 500,1600 C 900,1900 1100,2100 1200,2100";
@@ -237,7 +237,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                         >
                                             {/* Progress / Year marker like high-end portfolio */}
                                             <span className={`text-xs md:text-base font-Turbine transition-all duration-700 w-12 md:w-16 shrink-0 tracking-wider ${
-                                                isActive ? "text-white font-black" : "text-white/10"
+                                                isActive ? "text-white font-black" : "text-white/60"
                                             }`}>
                                                 ({idx === 0 ? "35" : "38"})
                                             </span>
@@ -247,7 +247,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                                 className={`text-xl md:text-3xl xl:text-4xl font-black font-Case tracking-widest uppercase transition-all duration-700 ${
                                                     isActive
                                                         ? "text-white scale-100"
-                                                        : "text-white/10 group-hover:text-white/30"
+                                                        : "text-white/60 group-hover:text-white/90"
                                                 }`}
                                             >
                                                 {job.company}
