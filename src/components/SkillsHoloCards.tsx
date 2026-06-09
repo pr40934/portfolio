@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
-import { Server, Layout, ShieldCheck, HardDrive, Wrench, Database, CheckCircle2 } from "lucide-react";
+import { Server, Layout, ShieldCheck, HardDrive, Wrench, Database } from "lucide-react";
 
 const SKILLS_DATA = [
     {
@@ -37,7 +37,7 @@ const SKILLS_DATA = [
 
 const HoloCard = ({ data, index }: { data: typeof SKILLS_DATA[0], index: number }) => {
     const cardRef = useRef<HTMLDivElement>(null);
-    const [isHovered, setIsHovered] = useState(false);
+    const [, setIsHovered] = useState(false);
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);

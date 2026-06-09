@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, Server, Layout, HardDrive, Wrench, ShieldCheck, Database, Maximize2, Minus, X } from "lucide-react";
 
