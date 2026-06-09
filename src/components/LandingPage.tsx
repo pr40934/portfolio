@@ -84,15 +84,6 @@ const SKILLS = {
 };
 
 // ── UI Components ───────────────────────────────────────────────────────────
-const GlassCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-    <motion.div
-        whileHover={{ y: -5 }}
-        className={`rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-all hover:bg-white/10 ${className}`}
-    >
-        {children}
-    </motion.div>
-);
-
 const SectionHeader = ({ title, subtitle }: { title: string; subtitle?: string }) => (
     <div className="flex flex-col gap-2 mb-8">
         <h2 className="text-[10px] md:text-xs font-Turbine tracking-[0.4em] text-white/60 uppercase">{title}</h2>
@@ -127,9 +118,9 @@ export function LandingPage() {
     const baseX = useMotionValue(0);
     const isDragging = useRef(false);
 
-    useAnimationFrame((t, delta) => {
+    useAnimationFrame((_t, delta) => {
         if (!isDragging.current) {
-            let moveBy = 0.0004 * delta; // Slower, premium smooth drift
+            let moveBy = 0.00015 * delta; // Slower, premium smooth drift
             baseX.set(baseX.get() - moveBy);
         }
     });
@@ -304,7 +295,7 @@ export function LandingPage() {
                                 style={{ x: reverseX }}
                                 onPanStart={() => isDragging.current = true}
                                 onPanEnd={() => isDragging.current = false}
-                                onPan={(e, info) => {
+                                onPan={(_e, info) => {
                                     baseX.set(baseX.get() - info.delta.x * 0.03);
                                 }}
                             >
@@ -322,7 +313,7 @@ export function LandingPage() {
                                 style={{ x }}
                                 onPanStart={() => isDragging.current = true}
                                 onPanEnd={() => isDragging.current = false}
-                                onPan={(e, info) => {
+                                onPan={(_e, info) => {
                                     baseX.set(baseX.get() + info.delta.x * 0.03);
                                 }}
                             >
