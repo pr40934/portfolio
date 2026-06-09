@@ -93,7 +93,13 @@ export function LandingPage() {
 
 
     const handleResumeClick = () => {
-        setShowResume(true);
+        const isMobile = window.innerWidth < 768;
+        if (isMobile) {
+            // Mobile browsers can't render PDFs in iframes — open natively
+            window.open("/resume/PratapRaju_Senior_Software_Engineer.pdf", "_blank");
+        } else {
+            setShowResume(true);
+        }
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,22 +135,22 @@ export function LandingPage() {
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Modal Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
-                            <div className="flex flex-col">
-                                <span className="font-Case text-white text-lg tracking-wide">Pratap Raju</span>
-                                <span className="font-Turbine text-[10px] text-white/40 tracking-widest uppercase">Senior Software Engineer · Resume</span>
+                        <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-white/10 shrink-0">
+                            <div className="flex flex-col min-w-0">
+                                <span className="font-Case text-white text-base md:text-lg tracking-wide truncate">Pratap Raju</span>
+                                <span className="font-Turbine text-[9px] md:text-[10px] text-white/40 tracking-widest uppercase">Senior Software Engineer · Resume</span>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 ml-auto">
                                 <a
                                     href="/resume/PratapRaju_Senior_Software_Engineer.pdf"
                                     download
-                                    className="font-Turbine font-bold text-[10px] tracking-widest uppercase px-5 py-2 rounded-xl bg-emerald-500 text-white hover:bg-emerald-400 transition-colors"
+                                    className="font-Turbine font-bold text-[10px] tracking-widest uppercase px-4 py-2 rounded-xl bg-emerald-500 text-white hover:bg-emerald-400 transition-colors whitespace-nowrap"
                                 >
                                     Download
                                 </a>
                                 <button
                                     onClick={() => setShowResume(false)}
-                                    className="w-8 h-8 flex items-center justify-center rounded-full border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-colors"
+                                    className="w-8 h-8 shrink-0 flex items-center justify-center rounded-full border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-colors"
                                 >
                                     <X size={14} />
                                 </button>
