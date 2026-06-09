@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useInView, animate } from "framer-motion";
 import { Linkedin, Github, MessageCircle, ArrowUpRight } from "lucide-react";
 
 const SOCIAL_LINKS = [
@@ -12,22 +12,44 @@ export const ConnectSection = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [githubMsg, setGithubMsg] = useState<"double" | "final" | null>(null);
     const [hoverGithub, setHoverGithub] = useState(false);
-    
+    const [isHovered, setIsHovered] = useState(false);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start end", "end end"]
+        offset: ["start start", "end start"]
     });
 
-    // The massive text fill animation is handled via CSS clip-path in the JSX below
+    // fillRight: 100 = fully hidden, 0 = fully visible
+    const fillRight = useMotionValue(100);
+    const clipPath = useTransform(fillRight, (v) => `inset(0 ${v}% 0 0)`);
+    const isInView = useInView(containerRef, { once: true, amount: 0.2 });
+
+    // Phase 1: animate 0% → 10% fill when section enters viewport (once)
+    useEffect(() => {
+        if (isInView) {
+            animate(fillRight, 90, { duration: 0.8, ease: "easeOut" });
+        }
+    }, [isInView]);
+
+    // Phase 2: scroll fills remaining 10% → 100% (90 → 0 in fillRight terms)
+    useEffect(() => {
+        return scrollYProgress.on("change", (v) => {
+            const scrollTarget = Math.max(0, 90 - (v / 0.5) * 90);
+            // Only update if scroll makes it MORE filled (lower value)
+            if (scrollTarget < fillRight.get()) {
+                fillRight.set(scrollTarget);
+            }
+        });
+    }, [scrollYProgress]);
 
     return (
-        <section 
+        <section
             ref={containerRef}
-            id="connect" 
+            id="connect"
             className="w-full bg-white/5 backdrop-blur-md border-t border-white/10 pt-20 pb-10 px-4 md:px-8 z-20 flex flex-col justify-between min-h-[80vh]"
         >
             <div className="max-w-7xl mx-auto w-full flex flex-col gap-12">
-                
+
                 {/* Structural Top Bar */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-8 gap-4">
                     <div className="flex items-center gap-3">
@@ -43,31 +65,45 @@ export const ConnectSection = () => {
 
                 {/* Massive Scroll-Fill Typography */}
                 <div className="py-12 md:py-24">
-                    <div className="relative inline-block">
-                        {/* Base layer: Outlined text */}
-                        <h1 
-                            className="text-[4rem] md:text-[8rem] lg:text-[10rem] font-Case uppercase tracking-tighter leading-[0.85] text-transparent"
-                            style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
+                    <div 
+                        className="relative inline-block cursor-default"
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        {/* Base layer: Faded transparent white — visible before scroll */}
+                        <h1
+                            className="text-[4rem] md:text-[8rem] lg:text-[10rem] font-Case uppercase tracking-tighter leading-[0.85] select-none"
+                            style={{ color: "rgba(255,255,255,0.15)" }}
                         >
-                            HAVE AN <br /> IDEA?
+                            HAVE AN <br /> IDEA<motion.span
+                                animate={isHovered ? {
+                                    rotate: [0, -15, 12, -10, 8, -5, 0],
+                                    transition: { duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.3 }
+                                } : { rotate: 0 }}
+                                style={{ display: "inline-block", originX: "0.5", originY: "1" }}
+                            >?</motion.span>
                         </h1>
-                        
-                        {/* Overlay layer: Solid text with clip-path reveal */}
-                        <motion.h1 
-                            className="absolute top-0 left-0 text-[4rem] md:text-[8rem] lg:text-[10rem] font-Case uppercase tracking-tighter leading-[0.85] text-white"
-                            style={{
-                                clipPath: useTransform(scrollYProgress, [0.2, 0.8], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"])
-                            }}
+
+                        {/* Overlay layer: Solid white fills left-to-right via scroll */}
+                        <motion.h1
+                            className="absolute top-0 left-0 text-[4rem] md:text-[8rem] lg:text-[10rem] font-Case uppercase tracking-tighter leading-[0.85] text-white select-none"
+                            style={{ clipPath }}
                             aria-hidden="true"
                         >
-                            HAVE AN <br /> IDEA?
+                            HAVE AN <br /> IDEA<motion.span
+                                animate={isHovered ? {
+                                    rotate: [0, -15, 12, -10, 8, -5, 0],
+                                    transition: { duration: 0.7, ease: "easeInOut", repeat: Infinity, repeatDelay: 0.3 }
+                                } : { rotate: 0 }}
+                                style={{ display: "inline-block", originX: "0.5", originY: "1" }}
+                            >?</motion.span>
                         </motion.h1>
                     </div>
                 </div>
 
                 {/* Grid Links Section */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 border-t border-b border-white/10">
-                    
+
                     {/* Primary Email */}
                     <div className="md:col-span-2 py-12 md:border-r border-white/10 md:pr-12 group cursor-pointer">
                         <a href="mailto:pr4093403@gmail.com" className="flex flex-col gap-6 w-full h-full justify-center">
@@ -92,7 +128,7 @@ export const ConnectSection = () => {
                         </span>
                         <div className="flex flex-col gap-4">
                             {SOCIAL_LINKS.map((link) => (
-                                <a 
+                                <a
                                     key={link.label}
                                     href={link.href}
                                     rel="noopener noreferrer"
@@ -128,7 +164,7 @@ export const ConnectSection = () => {
                                                 {link.label}
                                             </span>
                                             {link.label === "GitHub" && (hoverGithub || githubMsg === "double" || githubMsg === "final") && (
-                                                <motion.span 
+                                                <motion.span
                                                     key={githubMsg === "double" || githubMsg === "final" ? "msg2" : "msg1"}
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
