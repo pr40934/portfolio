@@ -15,6 +15,7 @@ import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { GlowCursor } from "@/components/GlowCursor";
 import { SkillsHorizontalScroll } from "@/components/SkillsHorizontalScroll";
+import { ConnectSection } from "@/components/ConnectSection";
 import { ReactLenis } from 'lenis/react';
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -243,6 +244,9 @@ export function LandingPage() {
                     
                     <SkillsHorizontalScroll />
                 </section>
+
+                <ConnectSection />
+
                 {/* Resume Preview Modal (Overlay) */}
                 {showResume && selectedResumeFile && (
                     <motion.div
