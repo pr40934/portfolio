@@ -114,7 +114,8 @@ export function LandingPage() {
     const [selectedResumeFile, setSelectedResumeFile] = useState<File | null>(null);
 
     // Marquee State
-    const allSkills = Object.values(SKILLS).flat();
+    const topRowSkills = [...SKILLS.Backend, ...SKILLS.Auth, ...SKILLS.OsAndDevops, ...SKILLS.Database];
+    const bottomRowSkills = [...SKILLS.Frontend, ...SKILLS.Tools, ...SKILLS.TestingAndQuality];
     const baseX = useMotionValue(0);
     const isDragging = useRef(false);
 
@@ -130,7 +131,7 @@ export function LandingPage() {
             const rangeSize = max - min;
             return ((((val - min) % rangeSize) + rangeSize) % rangeSize) + min;
         };
-        return `${wrap(-50, 0, v)}%`;
+        return `${wrap(-50, -25, v)}%`;
     });
 
     const reverseX = useTransform(baseX, (v) => {
@@ -138,10 +139,10 @@ export function LandingPage() {
             const rangeSize = max - min;
             return ((((val - min) % rangeSize) + rangeSize) % rangeSize) + min;
         };
-        return `${wrap(-50, 0, -v)}%`;
+        return `${wrap(-50, -25, -v)}%`;
     });
 
-    const reverseSkills = [...allSkills].reverse();
+
 
     const handleResumeClick = () => {
         fileInputRef.current?.click();
@@ -289,7 +290,7 @@ export function LandingPage() {
                     </div>
                     <div className="w-full h-[200px] md:h-[240px] overflow-hidden relative cursor-grab active:cursor-grabbing mask-horizontal-fade mt-12 py-8">
                         {/* Row 1 (Top) - Reversed, Positive Rotation */}
-                        <div className="absolute inset-0 flex items-center justify-center rotate-[8deg] scale-[1.15] origin-center z-10 pointer-events-none">
+                        <div className="absolute inset-0 flex items-center justify-start rotate-[8deg] scale-[1.15] origin-center z-10 pointer-events-none">
                             <motion.div
                                 className="flex w-[max-content] pointer-events-auto"
                                 style={{ x: reverseX }}
@@ -299,15 +300,15 @@ export function LandingPage() {
                                     baseX.set(baseX.get() - info.delta.x * 0.03);
                                 }}
                             >
-                                <SkillChain items={reverseSkills} />
-                                <SkillChain items={reverseSkills} />
-                                <SkillChain items={reverseSkills} />
-                                <SkillChain items={reverseSkills} />
+                                <SkillChain items={topRowSkills} />
+                                <SkillChain items={topRowSkills} />
+                                <SkillChain items={topRowSkills} />
+                                <SkillChain items={topRowSkills} />
                             </motion.div>
                         </div>
 
                         {/* Row 2 (Bottom) - Normal, Negative Rotation */}
-                        <div className="absolute inset-0 flex items-center justify-center -rotate-[8deg] scale-[1.15] origin-center z-0 pointer-events-none">
+                        <div className="absolute inset-0 flex items-center justify-start -rotate-[8deg] scale-[1.15] origin-center z-0 pointer-events-none">
                             <motion.div
                                 className="flex w-[max-content] pointer-events-auto"
                                 style={{ x }}
@@ -317,10 +318,10 @@ export function LandingPage() {
                                     baseX.set(baseX.get() + info.delta.x * 0.03);
                                 }}
                             >
-                                <SkillChain items={allSkills} />
-                                <SkillChain items={allSkills} />
-                                <SkillChain items={allSkills} />
-                                <SkillChain items={allSkills} />
+                                <SkillChain items={bottomRowSkills} />
+                                <SkillChain items={bottomRowSkills} />
+                                <SkillChain items={bottomRowSkills} />
+                                <SkillChain items={bottomRowSkills} />
                             </motion.div>
                         </div>
                     </div>
