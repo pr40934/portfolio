@@ -216,7 +216,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                         <span className="text-[10px] md:text-xs font-Turbine tracking-[0.6em] text-white/60 uppercase">
                             Professional Path
                         </span>
-                        <h2 className="text-3xl md:text-6xl font-SuperPunch text-white tracking-wide uppercase">
+                        <h2 className="text-3xl md:text-6xl font-Case text-white tracking-wide uppercase">
                             Work Experience
                         </h2>
                     </div>
@@ -244,7 +244,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
 
                                             {/* Typography Role Title */}
                                             <h3
-                                                className={`text-xl md:text-3xl xl:text-4xl font-black font-Case tracking-widest uppercase transition-all duration-700 ${
+                                                className={`text-xl md:text-3xl xl:text-4xl font-black font-Turbine tracking-widest uppercase transition-all duration-700 ${
                                                     isActive
                                                         ? "text-white scale-100"
                                                         : "text-white/60 group-hover:text-white/90"
@@ -298,10 +298,10 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                                         )}
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-xl md:text-2xl font-black font-Case tracking-tight text-white leading-tight">
+                                                        <h4 className="text-xl font-Case mt-2 mb-2 text-white">
                                                             {EXPERIENCE_DATA[activeIndex].role}
                                                         </h4>
-                                                        <p className="text-base font-Case font-bold text-white/60 mt-0.5">
+                                                        <p className="text-base font-Case mb-2 text-white/80">
                                                             {EXPERIENCE_DATA[activeIndex].company}
                                                         </p>
                                                     </div>

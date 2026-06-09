@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { StarsBackground } from "@/components/ui/stars-background";
 import { Component as EtheralShadow } from "@/components/ui/etheral-shadow";
-import { ContainerTextFlip } from "@/components/ui/container-text-flip";
+
 import { NavBar } from "@/components/ui/nav-bar";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { ResumePreview } from "@/components/ui/resume-preview";
@@ -145,11 +145,9 @@ export function LandingPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <ContainerTextFlip
-                            words={["PRATAP RAJU"]}
-                            className="w-full font-SuperPunch md:text-9xl text-5xl tracking-wide text-white bg-transparent shadow-none drop-shadow-2xl"
-                            textClassName="text-white"
-                        />
+                        <h1 className="w-full font-Case font-normal md:text-[8rem] lg:text-[10rem] text-5xl tracking-tight text-white pb-4 drop-shadow-2xl">
+                            PRATAP <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-600">RAJU</span>
+                        </h1>
                     </motion.div>
 
                     <motion.div
@@ -202,7 +200,7 @@ export function LandingPage() {
                                         <ExternalLink size={18} className="text-white/30" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-Case font-bold mb-2">{project.title}</h3>
+                                        <h3 className="text-xl font-Case mt-2 mb-2 text-white">{project.title}</h3>
                                         <p className="text-sm text-white font-Turbine leading-relaxed mb-4 drop-shadow-sm">
                                             {project.description}
                                         </p>
