@@ -15,15 +15,33 @@ function HoverLink({
   onClick?: () => void;
   className?: string;
 }) {
+  const letters = children.split("");
+
   return (
-    <a href={href} onClick={onClick}
-      className={`group relative block overflow-hidden ${className}`}
-    >
-      <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full">
-        {children}
-      </span>
-      <span className="absolute inset-0 translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0" aria-hidden>
-        {children}
+    <a href={href} onClick={onClick} className={`group block ${className}`}>
+      <span className="relative flex overflow-hidden">
+        <span className="flex">
+          {letters.map((letter, i) => (
+            <span
+              key={`top-${i}`}
+              className="inline-block transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full"
+              style={{ transitionDelay: `${i * 0.025}s` }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </span>
+          ))}
+        </span>
+        <span className="absolute inset-0 flex" aria-hidden>
+          {letters.map((letter, i) => (
+            <span
+              key={`bot-${i}`}
+              className="inline-block translate-y-full transition-transform duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0"
+              style={{ transitionDelay: `${i * 0.025}s` }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </span>
+          ))}
+        </span>
       </span>
     </a>
   );
