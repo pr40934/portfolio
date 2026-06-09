@@ -150,7 +150,7 @@
   }
 
   body {
-    @apply text-foreground overflow-x-hidden;
+    @apply text-foreground overflow-x-clip;
     background-color: #052415;
   }
 }

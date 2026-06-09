@@ -13,6 +13,10 @@ import { RevealGrid } from "@/components/ui/reveal-grid";
 import { motion, useAnimationFrame, useMotionValue, useTransform } from "framer-motion";
 import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 import { ExperienceSection } from "@/components/ExperienceSection";
+import { GlowCursor } from "@/components/GlowCursor";
+import { SkillsAwwwards } from "@/components/SkillsAwwwards";
+import { SkillsStackedCards } from "@/components/SkillsStackedCards";
+import { SkillsHorizontalScroll } from "@/components/SkillsHorizontalScroll";
 import { ReactLenis } from 'lenis/react';
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -73,16 +77,6 @@ const PROJECTS: Project[] = [
     }
 ];
 
-const SKILLS = {
-    Backend: ["Python", "Django", "Redis", "RabbitMQ", "Celery & Beat CRON", "Uvicorn (ASGI)", "GraphQL API", "REST API", "Serverless", "Supabase"],
-    Auth: ["JWT", "OAuth2", "Django Auth"],
-    OsAndDevops: ["AWS S3", "CloudFront", "EC2 Linux", "Windows", "PM2"],
-    Frontend: ["Next.js", "React.js", "Redux", "Zustand", "Hooks", "HTML", "CSS", "JS", "Bootstrap", "Tailwind CSS", "Responsive Design"],
-    Tools: ["Postman", "GIT", "Jira", "AI", "Claude code", "Cursor IDE"],
-    Database: ["PostgreSQL", "MySQL", "MongoDB"],
-    TestingAndQuality: ["Code Reviews", "API Testing", "Manual Testing"]
-};
-
 // ── UI Components ───────────────────────────────────────────────────────────
 const SectionHeader = ({ title, subtitle }: { title: string; subtitle?: string }) => (
     <div className="flex flex-col gap-2 mb-8">
@@ -91,56 +85,11 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle?: string }
     </div>
 );
 
-const SkillChain = ({ items }: { items: string[] }) => (
-    <div className="flex items-center shrink-0 drop-shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-        {items.map((item, idx) => (
-            <React.Fragment key={`${item}-${idx}`}>
-                <div className="h-[48px] px-6 md:px-8 flex items-center justify-center border-y border-emerald-500/40 bg-transparent shrink-0">
-                    <span className="text-lg font-Case text-emerald-50 whitespace-nowrap">{item}</span>
-                </div>
-                <svg width="60" height="48" viewBox="0 0 60 48" className="shrink-0">
-                    <path d="M 0,0.5 C 15,0.5 15,12 30,12 C 45,12 45,0.5 60,0.5" fill="none" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1" />
-                    <path d="M 0,47.5 C 15,47.5 15,36 30,36 C 45,36 45,47.5 60,47.5" fill="none" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1" />
-                </svg>
-            </React.Fragment>
-        ))}
-    </div>
-);
-
 // ── Main Page ───────────────────────────────────────────────────────────────
 export function LandingPage() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [showResume, setShowResume] = useState(false);
     const [selectedResumeFile, setSelectedResumeFile] = useState<File | null>(null);
-
-    // Marquee State
-    const topRowSkills = [...SKILLS.Backend, ...SKILLS.Auth, ...SKILLS.OsAndDevops, ...SKILLS.Database];
-    const bottomRowSkills = [...SKILLS.Frontend, ...SKILLS.Tools, ...SKILLS.TestingAndQuality];
-    const baseX = useMotionValue(0);
-    const isDragging = useRef(false);
-
-    useAnimationFrame((_t, delta) => {
-        if (!isDragging.current) {
-            let moveBy = 0.00015 * delta; // Slower, premium smooth drift
-            baseX.set(baseX.get() - moveBy);
-        }
-    });
-
-    const x = useTransform(baseX, (v) => {
-        const wrap = (min: number, max: number, val: number) => {
-            const rangeSize = max - min;
-            return ((((val - min) % rangeSize) + rangeSize) % rangeSize) + min;
-        };
-        return `${wrap(-50, -25, v)}%`;
-    });
-
-    const reverseX = useTransform(baseX, (v) => {
-        const wrap = (min: number, max: number, val: number) => {
-            const rangeSize = max - min;
-            return ((((val - min) % rangeSize) + rangeSize) % rangeSize) + min;
-        };
-        return `${wrap(-50, -25, -v)}%`;
-    });
 
 
 
@@ -158,6 +107,7 @@ export function LandingPage() {
 
     return (
         <ReactLenis root>
+            <GlowCursor />
             {/* Premium Fixed Background Underlay */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <AuroraBackground>
@@ -285,74 +235,15 @@ export function LandingPage() {
 
                 {/* Skills & Expertise Section (Edge to Edge) */}
                 <section id="skills" className="w-full pb-20">
+                    {/* 
                     <div className="max-w-7xl mx-auto w-full">
                         <SectionHeader title="Expertise" subtitle="My Technical Stack" />
                     </div>
-                    <div className="w-full h-[200px] md:h-[240px] overflow-hidden relative cursor-grab active:cursor-grabbing mask-horizontal-fade mt-12 py-8">
-                        
-                        {/* Intersection Nexus Core */}
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                            {/* Ambient Glow */}
-                            <motion.div
-                                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute w-32 h-32 md:w-48 md:h-48 bg-emerald-500/20 rounded-full blur-[30px]"
-                            />
-                            {/* Mechanical Node */}
-                            <div className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
-                                {/* Outer rotating ring */}
-                                <motion.div
-                                    animate={{ rotate: [0, 360] }}
-                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                    className="absolute inset-0 border border-emerald-500/20 rounded-full border-t-emerald-400/60 border-b-emerald-400/60"
-                                />
-                                {/* Inner spinning glass lens */}
-                                <motion.div
-                                    animate={{ rotate: [0, -360] }}
-                                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                                    className="absolute w-10 h-10 md:w-12 md:h-12 border border-emerald-500/20 border-t-emerald-400/60 bg-emerald-950/40 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.3)] rounded-full"
-                                />
-                                {/* Core energy spark */}
-                                <div className="absolute w-2 h-2 md:w-3 md:h-3 bg-emerald-300 rounded-full shadow-[0_0_15px_#6ee7b7,0_0_30px_#10b981]" />
-                            </div>
-                        </div>
-
-                        {/* Row 1 (Top) - Reversed, Positive Rotation */}
-                        <div className="absolute inset-0 flex items-center justify-start rotate-[8deg] scale-[1.15] origin-center z-10 pointer-events-none">
-                            <motion.div
-                                className="flex w-[max-content] pointer-events-auto"
-                                style={{ x: reverseX }}
-                                onPanStart={() => isDragging.current = true}
-                                onPanEnd={() => isDragging.current = false}
-                                onPan={(_e, info) => {
-                                    baseX.set(baseX.get() - info.delta.x * 0.03);
-                                }}
-                            >
-                                <SkillChain items={topRowSkills} />
-                                <SkillChain items={topRowSkills} />
-                                <SkillChain items={topRowSkills} />
-                                <SkillChain items={topRowSkills} />
-                            </motion.div>
-                        </div>
-
-                        {/* Row 2 (Bottom) - Normal, Negative Rotation */}
-                        <div className="absolute inset-0 flex items-center justify-start -rotate-[8deg] scale-[1.15] origin-center z-0 pointer-events-none">
-                            <motion.div
-                                className="flex w-[max-content] pointer-events-auto"
-                                style={{ x }}
-                                onPanStart={() => isDragging.current = true}
-                                onPanEnd={() => isDragging.current = false}
-                                onPan={(_e, info) => {
-                                    baseX.set(baseX.get() + info.delta.x * 0.03);
-                                }}
-                            >
-                                <SkillChain items={bottomRowSkills} />
-                                <SkillChain items={bottomRowSkills} />
-                                <SkillChain items={bottomRowSkills} />
-                                <SkillChain items={bottomRowSkills} />
-                            </motion.div>
-                        </div>
-                    </div>
+                    <SkillsAwwwards /> 
+                    <SkillsStackedCards />
+                    */}
+                    
+                    <SkillsHorizontalScroll />
                 </section>
                 {/* Resume Preview Modal (Overlay) */}
                 {showResume && selectedResumeFile && (
