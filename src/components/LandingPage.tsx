@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { GlowCursor } from "@/components/GlowCursor";
-import { SkillsHorizontalScroll } from "@/components/SkillsHorizontalScroll";
+import { SkillsRibbon } from "@/components/SkillsRibbon";
 import { ConnectSection } from "@/components/ConnectSection";
 import { ReactLenis } from 'lenis/react';
 
@@ -291,16 +291,8 @@ export function LandingPage() {
                 </div>
 
                 {/* Skills & Expertise Section (Edge to Edge) */}
-                <section id="skills" className="w-full pb-20">
-                    {/* 
-                    <div className="max-w-7xl mx-auto w-full">
-                        <SectionHeader title="Expertise" subtitle="My Technical Stack" />
-                    </div>
-                    <SkillsAwwwards /> 
-                    <SkillsStackedCards />
-                    */}
-                    
-                    <SkillsHorizontalScroll />
+                <section id="skills" className="w-full">
+                    <SkillsRibbon />
                 </section>
 
                 <ConnectSection />
