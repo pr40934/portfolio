@@ -1,171 +1,160 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Linkedin, MessageCircle, ArrowUpRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Linkedin, Github, MessageCircle, ArrowUpRight } from "lucide-react";
 
-const CONTACTS = [
-    {
-        id: "email",
-        label: "Drop an Email",
-        value: "hello@example.com", // Replace with actual email
-        href: "mailto:hello@example.com",
-        icon: <Mail className="w-8 h-8 md:w-12 md:h-12" />,
-        color: "bg-emerald-500",
-        hoverText: "Say Hello"
-    },
-    {
-        id: "linkedin",
-        label: "Connect on LinkedIn",
-        value: "pratap-raju",
-        href: "https://www.linkedin.com/in/pratap-raju/",
-        icon: <Linkedin className="w-8 h-8 md:w-12 md:h-12" />,
-        color: "bg-blue-600",
-        hoverText: "Network"
-    },
-    {
-        id: "whatsapp",
-        label: "Chat on WhatsApp",
-        value: "+91 0000000000", // Replace with actual number
-        href: "https://wa.me/910000000000",
-        icon: <MessageCircle className="w-8 h-8 md:w-12 md:h-12" />,
-        color: "bg-green-500",
-        hoverText: "Message"
-    }
+const SOCIAL_LINKS = [
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/pratap-raju/", icon: <Linkedin className="w-5 h-5" /> },
+    { label: "GitHub", href: "https://github.com/pr40934", icon: <Github className="w-5 h-5" /> },
+    { label: "WhatsApp", href: "https://wa.me/918688659066", icon: <MessageCircle className="w-5 h-5" /> },
 ];
 
 export const ConnectSection = () => {
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [githubMsg, setGithubMsg] = useState<"double" | "final" | null>(null);
+    const [hoverGithub, setHoverGithub] = useState(false);
+    
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end end"]
+    });
+
+    // The massive text fill animation is handled via CSS clip-path in the JSX below
 
     return (
-        <section id="connect" className="relative w-full min-h-screen flex flex-col justify-between py-24 px-4 md:px-8 z-20 overflow-hidden">
-            {/* Background Glow */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
-                <div className="w-[800px] h-[800px] bg-emerald-500/20 blur-[150px] rounded-full mix-blend-screen" />
-            </div>
-
-            {/* Header */}
-            <div className="w-full max-w-7xl mx-auto flex flex-col items-center text-center gap-6 mb-20 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                >
-                    <h2 className="text-sm md:text-base font-Turbine tracking-[0.5em] text-emerald-400 uppercase mb-4">
-                        What's Next?
-                    </h2>
-                    <h1 className="text-5xl md:text-[7rem] lg:text-[9rem] leading-[0.9] font-Case tracking-tighter text-white uppercase drop-shadow-2xl">
-                        Let's Build <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-600">
-                            Together
-                        </span>
-                    </h1>
-                </motion.div>
+        <section 
+            ref={containerRef}
+            id="connect" 
+            className="w-full bg-white/5 backdrop-blur-md border-t border-white/10 pt-20 pb-10 px-4 md:px-8 z-20 flex flex-col justify-between min-h-[80vh]"
+        >
+            <div className="max-w-7xl mx-auto w-full flex flex-col gap-12">
                 
-                <motion.p 
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2, duration: 0.8 }}
-                    className="max-w-2xl mt-8 text-white/50 font-Turbine text-lg md:text-xl"
-                >
-                    Have an idea or a project in mind? Let's discuss how we can turn it into reality. I'm currently open for new opportunities.
-                </motion.p>
-            </div>
+                {/* Structural Top Bar */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-8 gap-4">
+                    <div className="flex items-center gap-3">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="font-Turbine text-xs tracking-widest text-white/50 uppercase">
+                            Available for new projects
+                        </span>
+                    </div>
+                    <span className="font-Turbine text-xs tracking-widest text-emerald-400 uppercase">
+                        Let's Build Together
+                    </span>
+                </div>
 
-            {/* Interactive Contact List */}
-            <div className="w-full max-w-7xl mx-auto flex flex-col relative z-10">
-                {CONTACTS.map((contact, index) => {
-                    const isHovered = hoveredId === contact.id;
-
-                    return (
-                        <motion.a
-                            href={contact.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            key={contact.id}
-                            onMouseEnter={() => setHoveredId(contact.id)}
-                            onMouseLeave={() => setHoveredId(null)}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 + 0.3, duration: 0.6 }}
-                            className="group relative border-b border-white/10 last:border-b-0 py-10 md:py-16 flex items-center justify-between overflow-hidden cursor-pointer"
+                {/* Massive Scroll-Fill Typography */}
+                <div className="py-12 md:py-24">
+                    <div className="relative inline-block">
+                        {/* Base layer: Outlined text */}
+                        <h1 
+                            className="text-[4rem] md:text-[8rem] lg:text-[10rem] font-Case uppercase tracking-tighter leading-[0.85] text-transparent"
+                            style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
                         >
-                            {/* Hover Background Reveal: White Glass with Noise */}
-                            <motion.div 
-                                className="absolute inset-0 origin-left -z-10 overflow-hidden"
-                                initial={{ scaleX: 0 }}
-                                animate={{ scaleX: isHovered ? 1 : 0 }}
-                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                            >
-                                {/* Frosted glass background */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-transparent backdrop-blur-xl border-t border-white/10" />
-                                
-                                {/* Granular noise texture */}
-                                <div 
-                                    className="absolute inset-0 opacity-[0.2] mix-blend-overlay"
-                                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-                                />
-                            </motion.div>
+                            HAVE AN <br /> IDEA?
+                        </h1>
+                        
+                        {/* Overlay layer: Solid text with clip-path reveal */}
+                        <motion.h1 
+                            className="absolute top-0 left-0 text-[4rem] md:text-[8rem] lg:text-[10rem] font-Case uppercase tracking-tighter leading-[0.85] text-white"
+                            style={{
+                                clipPath: useTransform(scrollYProgress, [0.2, 0.8], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"])
+                            }}
+                            aria-hidden="true"
+                        >
+                            HAVE AN <br /> IDEA?
+                        </motion.h1>
+                    </div>
+                </div>
 
-                            {/* Left Side: Icon & Label */}
-                            <div className="flex items-center gap-6 md:gap-12 relative z-10 px-4 md:px-8">
-                                <motion.div 
-                                    animate={{ 
-                                        color: isHovered ? "#ffffff" : "rgba(255, 255, 255, 0.5)",
-                                        scale: isHovered ? 1.1 : 1,
-                                        rotate: isHovered ? -10 : 0
-                                    }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    {contact.icon}
-                                </motion.div>
-                                <motion.h3 
-                                    animate={{ 
-                                        color: isHovered ? "#ffffff" : "rgba(255, 255, 255, 0.9)",
-                                        x: isHovered ? 20 : 0
-                                    }}
-                                    transition={{ duration: 0.4 }}
-                                    className="text-3xl md:text-5xl font-Case tracking-tight"
-                                >
-                                    {contact.label}
-                                </motion.h3>
-                            </div>
-
-                            {/* Right Side: Value & Arrow */}
-                            <div className="flex items-center gap-8 relative z-10 px-4 md:px-8">
-                                <motion.span 
-                                    animate={{ 
-                                        opacity: isHovered ? 1 : 0,
-                                        x: isHovered ? 0 : 20
-                                    }}
-                                    transition={{ duration: 0.4 }}
-                                    className="hidden md:block text-xl font-Turbine text-white/90 uppercase tracking-widest"
-                                >
-                                    {contact.hoverText}
-                                </motion.span>
-                                
-                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center bg-white/5 backdrop-blur-sm overflow-hidden group-hover:border-white/50 transition-colors duration-500">
-                                    <motion.div
-                                        animate={{ 
-                                            rotate: isHovered ? 45 : 0,
-                                            scale: isHovered ? 1.2 : 1
-                                        }}
-                                        transition={{ duration: 0.4 }}
-                                    >
-                                        <ArrowUpRight className={`w-6 h-6 md:w-8 md:h-8 ${isHovered ? 'text-white' : 'text-white/50'}`} />
-                                    </motion.div>
+                {/* Grid Links Section */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 border-t border-b border-white/10">
+                    
+                    {/* Primary Email */}
+                    <div className="md:col-span-2 py-12 md:border-r border-white/10 md:pr-12 group cursor-pointer">
+                        <a href="mailto:pr4093403@gmail.com" className="flex flex-col gap-6 w-full h-full justify-center">
+                            <span className="font-Turbine text-xs tracking-widest text-white/50 uppercase">
+                                Drop me a line
+                            </span>
+                            <div className="flex items-center justify-between">
+                                <span className="text-3xl md:text-5xl font-Case tracking-tight text-white group-hover:text-emerald-400 transition-colors duration-500">
+                                    pr4093403@gmail.com
+                                </span>
+                                <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 group-hover:bg-emerald-500 group-hover:border-emerald-500 transition-colors duration-500">
+                                    <ArrowUpRight className="w-6 h-6 text-white group-hover:rotate-45 transition-transform duration-500" />
                                 </div>
                             </div>
-                        </motion.a>
-                    );
-                })}
-            </div>
+                        </a>
+                    </div>
 
-            {/* Simple Footer Text */}
-            <div className="w-full flex items-center justify-between text-white/30 font-Turbine text-xs uppercase tracking-widest mt-32 px-4 relative z-10">
-                <span>© {new Date().getFullYear()} Pratap Raju</span>
-                <span>Crafted with passion</span>
+                    {/* Social List */}
+                    <div className="py-12 md:pl-12 flex flex-col justify-center gap-6">
+                        <span className="font-Turbine text-xs tracking-widest text-white/50 uppercase">
+                            Connect
+                        </span>
+                        <div className="flex flex-col gap-4">
+                            {SOCIAL_LINKS.map((link) => (
+                                <a 
+                                    key={link.label}
+                                    href={link.href}
+                                    rel="noopener noreferrer"
+                                    onMouseEnter={() => {
+                                        if (link.label === "GitHub") setHoverGithub(true);
+                                    }}
+                                    onMouseLeave={() => {
+                                        if (link.label === "GitHub") setHoverGithub(false);
+                                    }}
+                                    onClick={(e) => {
+                                        if (link.label === "GitHub") e.preventDefault();
+                                    }}
+                                    onDoubleClick={(e) => {
+                                        if (link.label === "GitHub") {
+                                            e.preventDefault();
+                                            if (githubMsg === "double") {
+                                                // They're persistent — let them through 😄
+                                                setGithubMsg("final");
+                                                window.open(link.href, "_blank");
+                                            } else {
+                                                setGithubMsg("double");
+                                            }
+                                        }
+                                    }}
+                                    className="flex items-center justify-between group py-2 border-b border-white/5 hover:border-emerald-500/50 transition-colors select-none cursor-pointer"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-white/50 group-hover:text-emerald-400 transition-colors">
+                                            {link.icon}
+                                        </span>
+                                        <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+                                            <span className="font-Case text-xl text-white tracking-wide group-hover:text-emerald-400 transition-colors">
+                                                {link.label}
+                                            </span>
+                                            {link.label === "GitHub" && (hoverGithub || githubMsg === "double" || githubMsg === "final") && (
+                                                <motion.span 
+                                                    key={githubMsg === "double" || githubMsg === "final" ? "msg2" : "msg1"}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -10 }}
+                                                    className="font-Turbine text-[10px] md:text-xs text-emerald-400/80 normal-case tracking-wider"
+                                                >
+                                                    {githubMsg === "double" || githubMsg === "final"
+                                                        ? "(Why are you so interested in seeing an empty GitHub profile? Uff... double click to see)"
+                                                        : "(I'm pushing to the company account, nothing to see here — double click if you still wanna see)"}
+                                                </motion.span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <ArrowUpRight className="w-4 h-4 text-white/30 group-hover:text-emerald-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer Bottom */}
+                <div className="flex flex-col md:flex-row justify-between items-center text-white/30 font-Turbine text-[10px] md:text-xs uppercase tracking-[0.2em] mt-12 gap-4">
+                    <span>© {new Date().getFullYear()} Pratap Raju</span>
+                    <span>All Rights Reserved</span>
+                </div>
+
             </div>
         </section>
     );
