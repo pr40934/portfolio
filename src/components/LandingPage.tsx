@@ -289,6 +289,34 @@ export function LandingPage() {
                         <SectionHeader title="Expertise" subtitle="My Technical Stack" />
                     </div>
                     <div className="w-full h-[200px] md:h-[240px] overflow-hidden relative cursor-grab active:cursor-grabbing mask-horizontal-fade mt-12 py-8">
+                        
+                        {/* Intersection Nexus Core */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                            {/* Ambient Glow */}
+                            <motion.div
+                                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute w-32 h-32 md:w-48 md:h-48 bg-emerald-500/20 rounded-full blur-[30px]"
+                            />
+                            {/* Mechanical Node */}
+                            <div className="relative w-20 h-20 md:w-24 md:h-24 flex items-center justify-center">
+                                {/* Outer rotating ring */}
+                                <motion.div
+                                    animate={{ rotate: [0, 360] }}
+                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                    className="absolute inset-0 border border-emerald-500/20 rounded-full border-t-emerald-400/60 border-b-emerald-400/60"
+                                />
+                                {/* Inner spinning glass lens */}
+                                <motion.div
+                                    animate={{ rotate: [0, -360] }}
+                                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                                    className="absolute w-10 h-10 md:w-12 md:h-12 border border-emerald-500/20 border-t-emerald-400/60 bg-emerald-950/40 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.3)] rounded-full"
+                                />
+                                {/* Core energy spark */}
+                                <div className="absolute w-2 h-2 md:w-3 md:h-3 bg-emerald-300 rounded-full shadow-[0_0_15px_#6ee7b7,0_0_30px_#10b981]" />
+                            </div>
+                        </div>
+
                         {/* Row 1 (Top) - Reversed, Positive Rotation */}
                         <div className="absolute inset-0 flex items-center justify-start rotate-[8deg] scale-[1.15] origin-center z-10 pointer-events-none">
                             <motion.div
