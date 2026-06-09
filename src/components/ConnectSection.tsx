@@ -14,33 +14,31 @@ export const ConnectSection = () => {
     const [hoverGithub, setHoverGithub] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end start"]
-    });
-
-    // fillRight: 100 = fully hidden, 0 = fully visible
-    const fillRight = useMotionValue(100);
-    const clipPath = useTransform(fillRight, (v) => `inset(0 ${v}% 0 0)`);
-    const isInView = useInView(containerRef, { once: true, amount: 0.2 });
-
-    // Phase 1: animate 0% → 10% fill when section enters viewport (once)
+    // 1. Initial 10% fill on mount/inView
+    const entryProgress = useMotionValue(0);
+    const isInView = useInView(containerRef, { once: true, amount: 0.1 });
+    
     useEffect(() => {
         if (isInView) {
-            animate(fillRight, 90, { duration: 0.8, ease: "easeOut" });
+            animate(entryProgress, 10, { duration: 0.8, ease: "easeOut" });
         }
-    }, [isInView]);
+    }, [isInView, entryProgress]);
 
-    // Phase 2: scroll fills remaining 10% → 100% (90 → 0 in fillRight terms)
-    useEffect(() => {
-        return scrollYProgress.on("change", (v) => {
-            const scrollTarget = Math.max(0, 90 - (v / 0.5) * 90);
-            // Only update if scroll makes it MORE filled (lower value)
-            if (scrollTarget < fillRight.get()) {
-                fillRight.set(scrollTarget);
-            }
-        });
-    }, [scrollYProgress]);
+    // 2. Scroll fill from 0 to 90
+    // "start 90%" -> when top of section enters from bottom
+    // "end 100%" -> when bottom of section hits bottom of screen (max scroll)
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start 90%", "end 100%"]
+    });
+
+    // 3. Combine them using modern Framer Motion reactive useTransform
+    const clipPath = useTransform(() => {
+        const entry = entryProgress.get();
+        const scroll = scrollYProgress.get() * 90;
+        const totalFill = Math.min(100, entry + scroll);
+        return `inset(0 ${100 - totalFill}% 0 0)`;
+    });
 
     return (
         <section
