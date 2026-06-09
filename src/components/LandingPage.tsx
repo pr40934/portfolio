@@ -10,7 +10,7 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { ResumePreview } from "@/components/ui/resume-preview";
 import { RevealCard } from "@/components/ui/reveal-card";
 import { RevealGrid } from "@/components/ui/reveal-grid";
-import { motion } from "framer-motion";
+import { motion, useAnimationFrame, useMotionValue, useTransform } from "framer-motion";
 import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { ReactLenis } from 'lenis/react';
@@ -97,11 +97,47 @@ const SectionHeader = ({ title, subtitle }: { title: string; subtitle?: string }
     </div>
 );
 
+const SkillChain = ({ items }: { items: string[] }) => (
+    <div className="flex items-center shrink-0 drop-shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+        {items.map((item, idx) => (
+            <React.Fragment key={`${item}-${idx}`}>
+                <div className="h-[48px] px-6 md:px-8 flex items-center justify-center border-y border-emerald-500/40 bg-transparent shrink-0">
+                    <span className="text-lg font-Case text-emerald-50 whitespace-nowrap">{item}</span>
+                </div>
+                <svg width="60" height="48" viewBox="0 0 60 48" className="shrink-0">
+                    <path d="M 0,0.5 C 15,0.5 15,12 30,12 C 45,12 45,0.5 60,0.5" fill="none" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1" />
+                    <path d="M 0,47.5 C 15,47.5 15,36 30,36 C 45,36 45,47.5 60,47.5" fill="none" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="1" />
+                </svg>
+            </React.Fragment>
+        ))}
+    </div>
+);
+
 // ── Main Page ───────────────────────────────────────────────────────────────
 export function LandingPage() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [showResume, setShowResume] = useState(false);
     const [selectedResumeFile, setSelectedResumeFile] = useState<File | null>(null);
+
+    // Marquee State
+    const allSkills = Object.values(SKILLS).flat();
+    const baseX = useMotionValue(0);
+    const isDragging = useRef(false);
+
+    useAnimationFrame((t, delta) => {
+        if (!isDragging.current) {
+            let moveBy = 0.001 * delta; // Slower, premium smooth drift
+            baseX.set(baseX.get() - moveBy);
+        }
+    });
+
+    const x = useTransform(baseX, (v) => {
+        const wrap = (min: number, max: number, val: number) => {
+            const rangeSize = max - min;
+            return ((((val - min) % rangeSize) + rangeSize) % rangeSize) + min;
+        };
+        return `${wrap(-50, 0, v)}%`;
+    });
 
     const handleResumeClick = () => {
         fileInputRef.current?.click();
@@ -200,9 +236,9 @@ export function LandingPage() {
                                     <div className="flex justify-between items-start">
                                         <div className="w-12 h-12 overflow-hidden flex items-center justify-center">
                                             {project.logo ? (
-                                                <img 
-                                                    src={project.logo} 
-                                                    alt={`${project.title} logo`} 
+                                                <img
+                                                    src={project.logo}
+                                                    alt={`${project.title} logo`}
                                                     className="w-full h-full object-contain rounded-lg"
                                                 />
                                             ) : (
@@ -235,41 +271,33 @@ export function LandingPage() {
                     </section>
                 </div>
 
-                {/* Interactive Premium Widescreen Timeline Section */}
-                <ExperienceSection />
+                <div className="max-w-7xl mx-auto w-full flex flex-col gap-24 pt-24 pb-24 text-white">
 
-                <div className="max-w-7xl mx-auto w-full flex flex-col gap-24 pt-24 pb-32 text-white">
+                    {/* Interactive Premium Widescreen Timeline Section */}
+                    <ExperienceSection />
 
-                    {/* Skills & Expertise Section */}
-                    <section id="skills" className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        <div>
-                            <SectionHeader title="Expertise" subtitle="My Technical Stack" />
-                            <div className="grid grid-cols-2 gap-4">
-                                {Object.entries(SKILLS).map(([cat, items]) => (
-                                    <div key={cat} className="flex flex-col gap-2">
-                                        <h4 className="text-[9px] md:text-[10px] font-Turbine tracking-[0.2em] text-white/70 uppercase mb-2 drop-shadow-sm">{cat}</h4>
-                                        <ul className="space-y-1.5 md:space-y-2">
-                                            {items.map(item => (
-                                                <li key={item} className="text-xs md:text-sm font-Case text-white/80 flex items-center gap-2">
-                                                    <div className="w-1 h-1 bg-emerald-500 rounded-full" />
-                                                    {item}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <GlassCard className="flex flex-col justify-center items-center text-center p-12">
-                            <Sparkles size={48} className="text-emerald-400 mb-6 opacity-50" />
-                            <h3 className="text-2xl font-Case font-bold mb-4">Always Learning</h3>
-                            <p className="text-white/60 font-Turbine leading-relaxed">
-                                I specialize in building systems that bridge the gap between complex data and intuitive user experiences. Currently exploring deeper integrations with Large Language Models and AI automation.
-                            </p>
-                        </GlassCard>
-                    </section>
                 </div>
 
+                {/* Skills & Expertise Section (Edge to Edge) */}
+                <section id="skills" className="w-full pb-20">
+                    <div className="max-w-7xl mx-auto w-full">
+                        <SectionHeader title="Expertise" subtitle="My Technical Stack" />
+                    </div>
+                    <div className="w-full overflow-hidden relative cursor-grab active:cursor-grabbing mask-horizontal-fade mt-8 py-4">
+                        <motion.div
+                            className="flex w-[max-content]"
+                            style={{ x }}
+                            onPanStart={() => isDragging.current = true}
+                            onPanEnd={() => isDragging.current = false}
+                            onPan={(e, info) => {
+                                baseX.set(baseX.get() + info.delta.x * 0.03); // Smooth 1:1 pan tracking
+                            }}
+                        >
+                            <SkillChain items={allSkills} />
+                            <SkillChain items={allSkills} />
+                        </motion.div>
+                    </div>
+                </section>
                 {/* Resume Preview Modal (Overlay) */}
                 {showResume && selectedResumeFile && (
                     <motion.div
