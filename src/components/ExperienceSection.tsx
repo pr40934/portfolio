@@ -232,21 +232,21 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                         <div
                                             key={job.company}
                                             onClick={() => handleItemClick(idx)}
-                                            className="group relative py-2 lg:py-8 cursor-pointer transition-all duration-700 flex items-center gap-3 lg:gap-8"
+                                            className="group relative py-3 lg:py-6 cursor-pointer transition-all duration-700 flex flex-col items-start gap-1 lg:gap-2"
                                         >
                                             {/* Progress / Year marker like high-end portfolio */}
-                                            <span className={`text-xs md:text-base font-Turbine transition-all duration-700 w-12 md:w-16 shrink-0 tracking-wider ${
+                                            <span className={`text-xs md:text-base font-Turbine transition-all duration-700 whitespace-nowrap shrink-0 tracking-wider ${
                                                 isActive ? "text-white font-black" : "text-white/60"
                                             }`}>
-                                                ({idx === 0 ? "35" : "38"})
+                                                ({idx === 0 ? "2025 - present" : "2023 - 2025"})
                                             </span>
 
                                             {/* Typography Role Title */}
                                             <h3
                                                 className={`text-xl md:text-3xl xl:text-4xl font-black font-Turbine tracking-widest uppercase transition-all duration-700 ${
                                                     isActive
-                                                        ? "text-white scale-100"
-                                                        : "text-white/60 group-hover:text-white/90"
+                                                        ? "text-white scale-100 origin-left"
+                                                        : "text-white/60 group-hover:text-white/90 origin-left"
                                                 }`}
                                             >
                                                 {job.company}
@@ -298,10 +298,10 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                                     </div>
                                                     <div>
                                                         <h4 className="text-xl font-Case mt-2 mb-2 text-white">
-                                                            {EXPERIENCE_DATA[activeIndex].role}
+                                                            {EXPERIENCE_DATA[activeIndex].company}
                                                         </h4>
                                                         <p className="text-base font-Case mb-2 text-white/80">
-                                                            {EXPERIENCE_DATA[activeIndex].company}
+                                                            {EXPERIENCE_DATA[activeIndex].role}
                                                         </p>
                                                     </div>
                                                 </div>
