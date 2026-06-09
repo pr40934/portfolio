@@ -74,10 +74,13 @@ const PROJECTS: Project[] = [
 ];
 
 const SKILLS = {
-    Frontend: ["React", "Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
-    Backend: ["Python", "Django", "Node.js", "REST APIs"],
-    Data: ["PostgreSQL", "SQL", "Data Translation", "ETL Pipelines"],
-    Tools: ["Git", "Docker", "Vite", "Tesseract.js", "PDF.js"]
+    Backend: ["Python", "Django", "Redis", "RabbitMQ", "Celery & Beat CRON", "Uvicorn (ASGI)", "GraphQL API", "REST API", "Serverless", "Supabase"],
+    Auth: ["JWT", "OAuth2", "Django Auth"],
+    OsAndDevops: ["AWS S3", "CloudFront", "EC2 Linux", "Windows", "PM2"],
+    Frontend: ["Next.js", "React.js", "Redux", "Zustand", "Hooks", "HTML", "CSS", "JS", "Bootstrap", "Tailwind CSS", "Responsive Design"],
+    Tools: ["Postman", "GIT", "Jira", "AI", "Claude code", "Cursor IDE"],
+    Database: ["PostgreSQL", "MySQL", "MongoDB"],
+    TestingAndQuality: ["Code Reviews", "API Testing", "Manual Testing"]
 };
 
 // ── UI Components ───────────────────────────────────────────────────────────
@@ -126,7 +129,7 @@ export function LandingPage() {
 
     useAnimationFrame((t, delta) => {
         if (!isDragging.current) {
-            let moveBy = 0.001 * delta; // Slower, premium smooth drift
+            let moveBy = 0.0004 * delta; // Slower, premium smooth drift
             baseX.set(baseX.get() - moveBy);
         }
     });
@@ -138,6 +141,16 @@ export function LandingPage() {
         };
         return `${wrap(-50, 0, v)}%`;
     });
+
+    const reverseX = useTransform(baseX, (v) => {
+        const wrap = (min: number, max: number, val: number) => {
+            const rangeSize = max - min;
+            return ((((val - min) % rangeSize) + rangeSize) % rangeSize) + min;
+        };
+        return `${wrap(-50, 0, -v)}%`;
+    });
+
+    const reverseSkills = [...allSkills].reverse();
 
     const handleResumeClick = () => {
         fileInputRef.current?.click();
@@ -283,19 +296,42 @@ export function LandingPage() {
                     <div className="max-w-7xl mx-auto w-full">
                         <SectionHeader title="Expertise" subtitle="My Technical Stack" />
                     </div>
-                    <div className="w-full overflow-hidden relative cursor-grab active:cursor-grabbing mask-horizontal-fade mt-8 py-4">
-                        <motion.div
-                            className="flex w-[max-content]"
-                            style={{ x }}
-                            onPanStart={() => isDragging.current = true}
-                            onPanEnd={() => isDragging.current = false}
-                            onPan={(e, info) => {
-                                baseX.set(baseX.get() + info.delta.x * 0.03); // Smooth 1:1 pan tracking
-                            }}
-                        >
-                            <SkillChain items={allSkills} />
-                            <SkillChain items={allSkills} />
-                        </motion.div>
+                    <div className="w-full h-[200px] md:h-[240px] overflow-hidden relative cursor-grab active:cursor-grabbing mask-horizontal-fade mt-12 py-8">
+                        {/* Row 1 (Top) - Reversed, Positive Rotation */}
+                        <div className="absolute inset-0 flex items-center justify-center rotate-[8deg] scale-[1.15] origin-center z-10 pointer-events-none">
+                            <motion.div
+                                className="flex w-[max-content] pointer-events-auto"
+                                style={{ x: reverseX }}
+                                onPanStart={() => isDragging.current = true}
+                                onPanEnd={() => isDragging.current = false}
+                                onPan={(e, info) => {
+                                    baseX.set(baseX.get() - info.delta.x * 0.03);
+                                }}
+                            >
+                                <SkillChain items={reverseSkills} />
+                                <SkillChain items={reverseSkills} />
+                                <SkillChain items={reverseSkills} />
+                                <SkillChain items={reverseSkills} />
+                            </motion.div>
+                        </div>
+
+                        {/* Row 2 (Bottom) - Normal, Negative Rotation */}
+                        <div className="absolute inset-0 flex items-center justify-center -rotate-[8deg] scale-[1.15] origin-center z-0 pointer-events-none">
+                            <motion.div
+                                className="flex w-[max-content] pointer-events-auto"
+                                style={{ x }}
+                                onPanStart={() => isDragging.current = true}
+                                onPanEnd={() => isDragging.current = false}
+                                onPan={(e, info) => {
+                                    baseX.set(baseX.get() + info.delta.x * 0.03);
+                                }}
+                            >
+                                <SkillChain items={allSkills} />
+                                <SkillChain items={allSkills} />
+                                <SkillChain items={allSkills} />
+                                <SkillChain items={allSkills} />
+                            </motion.div>
+                        </div>
                     </div>
                 </section>
                 {/* Resume Preview Modal (Overlay) */}
