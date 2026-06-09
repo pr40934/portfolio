@@ -22,29 +22,28 @@ const EXPERIENCE_DATA: ExperienceEntry[] = [
         role: "Senior Software Engineer",
         company: "Digistashing Technologies",
         type: "Full-time",
-        duration: "Dec 2025 - Present • 6 mos",
-        location: "Kolkata • Remote",
+        duration: "Dec 2025 – Present",
+        location: "Kolkata, India | Remote",
         logo: "/logos/Digistashing Technologies.svg",
-        description: "Architect and lead developer driving full-stack engineering and AI integration workflows. Designed high-throughput microservices and scalable APIs that connect enterprise partners with core gift card trading mechanisms.",
+        description: "Lead backend and web platform development while collaborating with mobile teams to drive architectural decisions and seamless cross-platform integrations.",
         achievements: [
-            "Architected and deployed the core backend for Gyftport using Django, GraphQL, and Redis/Celery, handling thousands of real-time transactions daily.",
-            "Designed high-throughput REST API schemas and led cross-functional engineering teams to implement seamless partner API integrations.",
-            "Engineered deep-tech insurance onboarding solutions featuring real-time biometric analysis and automated document compiling."
+            "Lead backend and web platform development while collaborating with mobile teams to drive architectural decisions and seamless cross-platform integrations.",
+            "Design secure authentication, wallet, payment, and gift card workflows while driving third-party integrations and platform scalability.",
+            "Collaborating with mobile, frontend, and design teams to deliver seamless cross-platform user experiences and integrations."
         ],
         tech: ["React", "Next.js", "Django", "Celery", "PostgreSQL", "Redis", "GraphQL", "AWS"]
     },
     {
-        role: "Associate Software Engineer",
+        role: "Software Engineer",
         company: "GSSPEC",
         type: "Full-time",
-        duration: "Feb 2023 - Jul 2025 • 2 yrs 6 mos",
-        location: "Hyderabad, Telangana, India",
+        duration: "Feb 2023 – July 2025 [2.6 Years]",
+        location: "Hyderabad, India",
         logo: "/logos/gsspec.svg",
-        description: "Developed enterprise SaaS financial syncing systems and candidate screening tools. Focused on integrating multiple third-party ERP platforms and optimizing database access performance.",
+        description: "Developed and maintained full-stack SaaS and client-based applications across finance, hiring, insurance, and automation domains.",
         achievements: [
-            "Integrated complex ERP systems (Tally ERP, Tally Prime, MS Business Central) into the MyFinalyst financial SaaS platform, enabling automated data sync.",
-            "Built secure and responsive dashboards with React/Redux that present dense accounting metrics and reports clearly.",
-            "Configured AWS infrastructure and deployed high-performance recruitment screening tools with Django, Postgres, and Docker."
+            "Developed and maintained full-stack SaaS and client-based applications across finance, hiring, insurance, and automation domains.",
+            "Collaborated with cross-functional teams to deliver new features, integrations, deployments, and production support throughout the software development lifecycle."
         ],
         tech: ["React", "Django", "Python", "Spring Boot", "MySQL", "MongoDB", "AWS", "Docker"]
     }

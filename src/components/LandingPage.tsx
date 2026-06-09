@@ -93,7 +93,7 @@ export function LandingPage() {
 
 
     const handleResumeClick = () => {
-        fileInputRef.current?.click();
+        setShowResume(true);
     };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,6 +107,60 @@ export function LandingPage() {
     return (
         <ReactLenis root>
             <GlowCursor />
+
+            {/* ── Resume Modal ── */}
+            {showResume && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[999] flex items-center justify-center p-4 md:p-8"
+                    onClick={() => setShowResume(false)}
+                >
+                    {/* Backdrop */}
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+
+                    {/* Modal Box */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 28 }}
+                        className="relative z-10 w-full max-w-4xl h-[90vh] flex flex-col rounded-2xl overflow-hidden border border-white/10 shadow-[0_25px_80px_rgba(0,0,0,0.8)] bg-zinc-950"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Modal Header */}
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
+                            <div className="flex flex-col">
+                                <span className="font-Case text-white text-lg tracking-wide">Pratap Raju</span>
+                                <span className="font-Turbine text-[10px] text-white/40 tracking-widest uppercase">Senior Software Engineer · Resume</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <a
+                                    href="/resume/PratapRaju_Senior_Software_Engineer.pdf"
+                                    download
+                                    className="font-Turbine font-bold text-[10px] tracking-widest uppercase px-5 py-2 rounded-xl bg-emerald-500 text-white hover:bg-emerald-400 transition-colors"
+                                >
+                                    Download
+                                </a>
+                                <button
+                                    onClick={() => setShowResume(false)}
+                                    className="w-8 h-8 flex items-center justify-center rounded-full border border-white/10 text-white/50 hover:text-white hover:border-white/30 transition-colors"
+                                >
+                                    <X size={14} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* PDF Iframe */}
+                        <iframe
+                            src="/resume/PratapRaju_Senior_Software_Engineer.pdf"
+                            className="w-full flex-1 bg-white"
+                            title="Pratap Raju Resume"
+                        />
+                    </motion.div>
+                </motion.div>
+            )}
+
             {/* Premium Fixed Background Underlay */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <AuroraBackground>
@@ -160,7 +214,7 @@ export function LandingPage() {
                             Building Scalable Full Stack Solutions with AI-Driven Excellence.
                         </p>
                         <div className="flex gap-4 mt-4">
-                            <a href="https://github.com/Pratap-Digistashing" target="_blank" rel="noreferrer">
+                            <a href="https://github.com/pr40934" target="_blank" rel="noreferrer">
                                 <ShinyButton className="!p-3 border border-white/10 bg-white/5 backdrop-blur-md !rounded-2xl"><Github size={20} /></ShinyButton>
                             </a>
                             <a href="https://www.linkedin.com/in/pratap-raju/" target="_blank" rel="noreferrer">
