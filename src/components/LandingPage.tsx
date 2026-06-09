@@ -10,12 +10,10 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { ResumePreview } from "@/components/ui/resume-preview";
 import { RevealCard } from "@/components/ui/reveal-card";
 import { RevealGrid } from "@/components/ui/reveal-grid";
-import { motion, useAnimationFrame, useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Github, Linkedin, ExternalLink, Sparkles, X, Code2 } from "lucide-react";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { GlowCursor } from "@/components/GlowCursor";
-import { SkillsAwwwards } from "@/components/SkillsAwwwards";
-import { SkillsStackedCards } from "@/components/SkillsStackedCards";
 import { SkillsHorizontalScroll } from "@/components/SkillsHorizontalScroll";
 import { ReactLenis } from 'lenis/react';
 

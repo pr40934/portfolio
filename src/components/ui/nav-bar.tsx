@@ -73,14 +73,19 @@ export const NavBar = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = document.querySelector(".relative.z-20.min-h-screen") as HTMLElement | null;
-    const onScroll = (e: Event) => {
-      const el = e.currentTarget as HTMLElement;
-      const pct = Math.round((el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100);
-      setScrollPct(isNaN(pct) ? 0 : pct);
+    const onScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      const pct = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100);
+      setScrollPct(isNaN(pct) ? 0 : Math.min(100, Math.max(0, pct)));
     };
-    container?.addEventListener("scroll", onScroll);
-    return () => container?.removeEventListener("scroll", onScroll);
+    
+    // Initialize once
+    onScroll();
+    
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
