@@ -1,4 +1,5 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useEffect } from "react";
+import { useScroll } from "framer-motion";
 
 interface RevealGridProps {
     children: React.ReactNode;
@@ -6,52 +7,109 @@ interface RevealGridProps {
     maskSize?: number;
 }
 
-/**
- * RevealGrid — wraps a grid of RevealCards and drives ALL their overlay masks
- * from a single shared mousemove listener, so the glow bleeds naturally across
- * card boundaries. This mirrors the original vanilla JS approach:
- *
- *   addEventListener('mousemove', (event) => {
- *     elements.forEach((element) => {
- *       const {top, left} = element.getBoundingClientRect();
- *       const x = event.pageX - left - maskSize / 2;
- *       const y = event.pageY - top  - maskSize / 2;
- *       element.style.webkitMaskPosition = `${x}px ${y}px`;
- *     });
- *   });
- */
 export function RevealGrid({ children, className = "", maskSize = 220 }: RevealGridProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    
+    // We use refs to store the latest mouse and scroll positions so they don't fight
+    const mousePosRef = useRef({ x: -9999, y: -9999, active: false });
+    const scrollPosRef = useRef({ leftX: -9999, rightX: -9999, y: -9999, active: false });
 
-    const handleMouseMove = useCallback(
-        (e: React.MouseEvent<HTMLDivElement>) => {
-            const container = containerRef.current;
-            if (!container) return;
-
-            // Query every overlay inside this grid — same as the original JS forEach
-            const overlays = container.querySelectorAll<HTMLElement>("[data-reveal-overlay]");
-            overlays.forEach((overlay) => {
-                const { top, left } = overlay.getBoundingClientRect();
-                const x = e.clientX - left - maskSize / 2;
-                const y = e.clientY - top  - maskSize / 2;
-
-                overlay.style.webkitMaskPosition = `${x}px ${y}px`;
-                overlay.style.maskPosition       = `${x}px ${y}px`;
-                overlay.style.opacity            = "1";
-            });
-        },
-        [maskSize]
-    );
-
-    const handleMouseLeave = useCallback(() => {
+    // Central function to update all 3 mask gradients (1 for mouse, 2 for scroll)
+    const updateMasks = useCallback(() => {
         const container = containerRef.current;
         if (!container) return;
 
         const overlays = container.querySelectorAll<HTMLElement>("[data-reveal-overlay]");
         overlays.forEach((overlay) => {
-            overlay.style.opacity = "0";
+            const oRect = overlay.getBoundingClientRect();
+            
+            // 1. Mouse Mask
+            let pos1 = "-9999px -9999px";
+            if (mousePosRef.current.active) {
+                const mx = mousePosRef.current.x - oRect.left;
+                const my = mousePosRef.current.y - oRect.top;
+                pos1 = `${mx - maskSize / 2}px ${my - maskSize / 2}px`;
+            }
+
+            // 2. Scroll Left Mask & 3. Scroll Right Mask
+            let pos2 = "-9999px -9999px";
+            let pos3 = "-9999px -9999px";
+            
+            if (scrollPosRef.current.active) {
+                const cRect = container.getBoundingClientRect();
+                const globalLeftX = cRect.left + scrollPosRef.current.leftX;
+                const globalRightX = cRect.left + scrollPosRef.current.rightX;
+                const globalY = cRect.top + scrollPosRef.current.y;
+
+                const lx = globalLeftX - oRect.left;
+                const rx = globalRightX - oRect.left;
+                const sy = globalY - oRect.top;
+
+                pos2 = `${lx - maskSize / 2}px ${sy - maskSize / 2}px`;
+                pos3 = `${rx - maskSize / 2}px ${sy - maskSize / 2}px`;
+            }
+
+            overlay.style.webkitMaskPosition = `${pos1}, ${pos2}, ${pos3}`;
+            overlay.style.maskPosition       = `${pos1}, ${pos2}, ${pos3}`;
+            overlay.style.opacity            = (mousePosRef.current.active || scrollPosRef.current.active) ? "1" : "0";
         });
-    }, []);
+    }, [maskSize]);
+
+    const handleMouseMove = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            mousePosRef.current = { x: e.clientX, y: e.clientY, active: true };
+            updateMasks();
+        },
+        [updateMasks]
+    );
+
+    const handleMouseLeave = useCallback(() => {
+        mousePosRef.current.active = false;
+        updateMasks();
+    }, [updateMasks]);
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start 60%", "end 40%"],
+    });
+
+    useEffect(() => {
+        return scrollYProgress.on("change", (v) => {
+            const container = containerRef.current;
+            if (!container) return;
+
+            const rect = container.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            if (v <= 0 || v >= 1) {
+                scrollPosRef.current.active = false;
+            } else {
+                let leftX = 0;
+                let rightX = width;
+                let y = v * height;
+
+                if (v < 0.25) {
+                    const progress = v / 0.25;
+                    leftX = progress * (width / 2);
+                    rightX = width - (progress * (width / 2));
+                } else if (v < 0.5) {
+                    leftX = width / 2;
+                    rightX = width / 2;
+                } else if (v < 0.75) {
+                    const progress = (v - 0.5) / 0.25;
+                    leftX = (width / 2) - (progress * (width / 2));
+                    rightX = (width / 2) + (progress * (width / 2));
+                } else {
+                    leftX = 0;
+                    rightX = width;
+                }
+                
+                scrollPosRef.current = { leftX, rightX, y, active: true };
+            }
+            updateMasks();
+        });
+    }, [scrollYProgress, updateMasks]);
 
     return (
         <div

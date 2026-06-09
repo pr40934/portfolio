@@ -290,7 +290,7 @@ export function ExperienceSection({ scrollContainerRef }: ExperienceSectionProps
                                                             <img
                                                                 src={EXPERIENCE_DATA[activeIndex].logo}
                                                                 alt={`${EXPERIENCE_DATA[activeIndex].company} logo`}
-                                                                className="w-full h-full object-contain filter invert opacity-80"
+                                                                className="w-full h-full object-contain"
                                                             />
                                                         ) : (
                                                             <span className="text-2xl">{EXPERIENCE_DATA[activeIndex].logo}</span>
