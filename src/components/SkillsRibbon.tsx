@@ -30,7 +30,7 @@ const BEZIER_CURVES: [ [number, number], [number, number], [number, number], [nu
     [[80, 800], [80, 950], [40, 950], [40, 1100]],
     [[40, 1100], [40, 1200], [70, 1200], [70, 1300]],
     [[70, 1300], [70, 1400], [15, 1400], [15, 1500]],
-    [[15, 1500], [15, 1550], [110, 1550], [120, 1600]]
+    [[15, 1500], [15, 1650], [110, 1650], [120, 1800]]
 ];
 
 // Helper to evaluate a cubic bezier curve at parameter t [0, 1]
@@ -61,7 +61,7 @@ function getPointForY(yTarget: number): [number, number] {
         { start: 800, end: 1100 },
         { start: 1100, end: 1300 },
         { start: 1300, end: 1500 },
-        { start: 1500, end: 1600 }
+        { start: 1500, end: 1800 }
     ];
     
     let segmentIdx = 0;
@@ -121,7 +121,7 @@ SKILLS_DATA.forEach((cat) => {
 
 // Map items to coordinates along the path with even Y spacing
 const yStart = 140;
-const yEnd = 1550;
+const yEnd = 1750;
 const yRange = yEnd - yStart;
 
 const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
@@ -131,7 +131,7 @@ const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
         ...item,
         x,
         y,
-        topPercent: (y / 1600) * 100,
+        topPercent: (y / 1800) * 100,
         leftPercent: x,
         isLeft: x > 50 // if curve is on right half, put badge on left side of curve
     };
@@ -182,7 +182,7 @@ export function SkillsRibbon() {
     });
 
     // Mask height grows as you scroll to progressively reveal the beam
-    const maskHeight = useTransform(scrollYProgress, [0, 1], [0, 1600]);
+    const maskHeight = useTransform(scrollYProgress, [0, 1], [0, 1800]);
 
     return (
         <section ref={containerRef} className="relative w-full max-w-6xl mx-auto bg-black/0 z-20 mt-12 mb-32 h-[2600px] md:h-[3600px]">
@@ -201,7 +201,7 @@ export function SkillsRibbon() {
 
             {/* SVG Snaking Ribbon */}
             <div className="absolute inset-0 w-full h-full pointer-events-none">
-                <svg viewBox="0 0 100 1600" preserveAspectRatio="none" className="w-full h-full overflow-visible">
+                <svg viewBox="0 0 100 1800" preserveAspectRatio="none" className="w-full h-full overflow-visible">
                     <defs>
                         <linearGradient id="vertRibbonGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#10b981" />
@@ -223,7 +223,7 @@ export function SkillsRibbon() {
                     
                     {/* Background track (light streak - always visible) */}
                     <path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
+                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1650, 110 1650, 120 1800"
                         fill="none" 
                         stroke="rgba(255, 255, 255, 0.05)" 
                         strokeWidth="14"
@@ -233,7 +233,7 @@ export function SkillsRibbon() {
                     
                     {/* Green beam - fixed width, progressively revealed by mask */}
                     <path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
+                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1650, 110 1650, 120 1800"
                         fill="none" 
                         stroke="url(#vertRibbonGrad)" 
                         strokeWidth="8"
