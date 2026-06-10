@@ -125,15 +125,32 @@ const yEnd = 1750;
 const yRange = yEnd - yStart;
 
 const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
-    const yTarget = yStart + (index / (FLATTENED_SKILLS.length - 1)) * yRange;
+    let yTarget = yStart + (index / (FLATTENED_SKILLS.length - 1)) * yRange;
+    
+    // Compress the Y spacing for the last few nodes (Data Systems) 
+    // because the curve is nearly horizontal here, which would otherwise 
+    // cause huge physical gaps between the dots.
+    if (index === 39) yTarget -= 10; // MySQL
+    if (index === 40) yTarget -= 28; // MongoDB
+    if (index === 41) yTarget -= 46; // Redis
+    if (index === 42) yTarget -= 64; // Supabase
+
     const [x, y] = getPointForY(yTarget);
+    
+    let isLeft = x > 50; // if curve is on right half, put badge on left side of curve
+    
+    // User requested these specific skills to have their badges on the right side
+    if (index >= 40 && index <= 42) {
+        isLeft = false;
+    }
+
     return {
         ...item,
         x,
         y,
         topPercent: (y / 1800) * 100,
         leftPercent: x,
-        isLeft: x > 50 // if curve is on right half, put badge on left side of curve
+        isLeft
     };
 });
 
