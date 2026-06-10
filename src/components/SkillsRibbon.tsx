@@ -9,7 +9,7 @@ const SKILLS_DATA = [
     { id: "devops", titleLine1: "Cloud", titleLine2: "& DevOps", icon: Cloud, skills: ["AWS S3", "CloudFront", "EC2 Linux", "PM2", "Docker", "Windows Server"], accent: "bg-cyan-600", shadow: "shadow-cyan-500/20" },
     { id: "tools", titleLine1: "Tooling", titleLine2: "& AI", icon: Settings, skills: ["Postman", "GIT", "Jira", "Claude", "Cursor IDE", "GitHub Actions"], accent: "bg-emerald-500", shadow: "shadow-emerald-500/20" },
     { id: "auth", titleLine1: "Auth", titleLine2: "& Security", icon: Key, skills: ["JWT", "OAuth2", "Session Auth", "Django Auth", "Security"], accent: "bg-teal-500", shadow: "shadow-teal-500/20" },
-    { id: "database", titleLine1: "Data", titleLine2: "Systems", icon: Database, skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Supabase"], accent: "bg-cyan-500", shadow: "shadow-cyan-500/20" },
+    { id: "database", titleLine1: "Data", titleLine2: "Systems", icon: Database, skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis"], accent: "bg-cyan-500", shadow: "shadow-cyan-500/20" },
 ] as const;
 
 // Flattened node structure
@@ -140,8 +140,48 @@ const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
     let isLeft = x > 50; // if curve is on right half, put badge on left side of curve
 
     // User requested these specific skills to have their badges on the right side
-    if (index >= 40 && index <= 42) {
+    if (index === 42) {
         isLeft = false;
+    }
+
+    // Celery, REST, GraphQL, Supabase (Backend skills, indices 5–8 in flattened list)
+    if (index >= 5 && index <= 8) {
+        isLeft = true;
+    }
+
+    // All Frontend Mastery skills (indices 10–16) → left side (excluding heading at 9)
+    if (index >= 10 && index <= 16) {
+        isLeft = true;
+    }
+
+    // Windows Server (DevOps, index 23)
+    if (index === 23) {
+        isLeft = true;
+    }
+
+    // Docker (DevOps, index 22)
+    if (index === 22) {
+        isLeft = true;
+    }
+
+    // Claude, Cursor IDE, GitHub Actions (Tools & AI, indices 28–30)
+    if (index >= 28 && index <= 30) {
+        isLeft = false;
+    }
+
+    // Jira (Tools & AI, index 27)
+    if (index === 27) {
+        isLeft = false;
+    }
+
+    // JWT (Auth & Security, index 32)
+    if (index === 32) {
+        isLeft = false;
+    }
+
+    // PostgreSQL, MySQL, MongoDB, Redis (Data Systems, indices 38–41)
+    if (index >= 38 && index <= 41) {
+        isLeft = true;
     }
 
     return {
