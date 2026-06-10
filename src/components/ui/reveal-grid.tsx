@@ -86,11 +86,12 @@ export function RevealGrid({ children, className = "", maskSize = 220 }: RevealG
             const width = rect.width;
             const height = rect.height;
 
-            if (v <= 0 || v >= 1) {
+            if (v <= 0) {
                 scrollPosRef.current.active = false;
             } else {
-                // All 3 spotlights travel straight down their borders simultaneously
-                const y       = v * height;
+                // Clamp v to 1 so when scroll ends, glow stays locked at the bottom
+                const clamped = Math.min(v, 1);
+                const y       = clamped * height;
                 const leftX   = 0;          // left outer border
                 const centerX = width / 2;  // center vertical border
                 const rightX  = width;      // right outer border
