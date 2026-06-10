@@ -87,22 +87,26 @@ export function RevealGrid({ children, className = "", maskSize = 220 }: RevealG
             } else {
                 let leftX = 0;
                 let rightX = width;
-                let y = v * height;
+                let y = 0;
 
-                if (v < 0.25) {
-                    const progress = v / 0.25;
-                    leftX = progress * (width / 2);
-                    rightX = width - (progress * (width / 2));
-                } else if (v < 0.5) {
-                    leftX = width / 2;
-                    rightX = width / 2;
-                } else if (v < 0.75) {
-                    const progress = (v - 0.5) / 0.25;
-                    leftX = (width / 2) - (progress * (width / 2));
-                    rightX = (width / 2) + (progress * (width / 2));
-                } else {
+                if (v < 0.33) {
+                    // Segment 1: Travel DOWN the outer left and right borders
+                    const progress = v / 0.33;
                     leftX = 0;
                     rightX = width;
+                    y = progress * (height / 2);
+                } else if (v < 0.66) {
+                    // Segment 2: Turn INWARD along the center horizontal border (dividing line between top and bottom cards)
+                    const progress = (v - 0.33) / 0.33;
+                    leftX = progress * (width / 2);
+                    rightX = width - (progress * (width / 2));
+                    y = height / 2;
+                } else {
+                    // Segment 3: Travel DOWN the center vertical border together
+                    const progress = (v - 0.66) / 0.34;
+                    leftX = width / 2;
+                    rightX = width / 2;
+                    y = (height / 2) + (progress * (height / 2));
                 }
                 
                 scrollPosRef.current = { leftX, rightX, y, active: true };
