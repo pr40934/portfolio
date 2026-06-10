@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Cpu, MonitorSmartphone, Cloud, Settings, Key, Database } from "lucide-react";
 
 // Original SKILLS_DATA
@@ -178,8 +178,11 @@ export function SkillsRibbon() {
     // Ribbon draws as you scroll down the container
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start center", "end center"] 
+        offset: ["start end", "end start"]
     });
+
+    // Mask height grows as you scroll to progressively reveal the beam
+    const maskHeight = useTransform(scrollYProgress, [0, 1], [0, 1600]);
 
     return (
         <section ref={containerRef} className="relative w-full max-w-6xl mx-auto bg-black/0 z-20 mt-12 mb-32 h-[2600px] md:h-[3600px]">
@@ -213,9 +216,12 @@ export function SkillsRibbon() {
                                 <feMergeNode in="SourceGraphic" />
                             </feMerge>
                         </filter>
+                        <mask id="beamRevealMask">
+                            <motion.rect x="-20" y="0" width="140" fill="white" style={{ height: maskHeight }} />
+                        </mask>
                     </defs>
                     
-                    {/* Background track (Thick translucent glass track) */}
+                    {/* Background track (light streak - always visible) */}
                     <path 
                         d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
                         fill="none" 
@@ -225,21 +231,8 @@ export function SkillsRibbon() {
                         strokeLinecap="round"
                     />
                     
-                    {/* Background Neon Aura (Animated, glow blurred) */}
-                    <motion.path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
-                        fill="none" 
-                        stroke="url(#vertRibbonGrad)" 
-                        strokeWidth="20"
-                        opacity="0.15"
-                        vectorEffect="non-scaling-stroke"
-                        strokeLinecap="round"
-                        style={{ pathLength: scrollYProgress }}
-                        filter="url(#ribbonGlow)"
-                    />
-
-                    {/* Main Core Ribbon (Animated, colored glass glow) */}
-                    <motion.path 
+                    {/* Green beam - fixed width, progressively revealed by mask */}
+                    <path 
                         d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
                         fill="none" 
                         stroke="url(#vertRibbonGrad)" 
@@ -247,18 +240,7 @@ export function SkillsRibbon() {
                         opacity="0.8"
                         vectorEffect="non-scaling-stroke"
                         strokeLinecap="round"
-                        style={{ pathLength: scrollYProgress }}
-                    />
-
-                    {/* Ribbon Specular Edge Reflection (Animated, white glass sheen) */}
-                    <motion.path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
-                        fill="none" 
-                        stroke="rgba(255, 255, 255, 0.45)" 
-                        strokeWidth="1.5"
-                        vectorEffect="non-scaling-stroke"
-                        strokeLinecap="round"
-                        style={{ pathLength: scrollYProgress }}
+                        mask="url(#beamRevealMask)"
                     />
                 </svg>
             </div>
