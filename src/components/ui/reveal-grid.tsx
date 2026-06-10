@@ -12,9 +12,9 @@ export function RevealGrid({ children, className = "", maskSize = 220 }: RevealG
     
     // We use refs to store the latest mouse and scroll positions so they don't fight
     const mousePosRef = useRef({ x: -9999, y: -9999, active: false });
-    const scrollPosRef = useRef({ leftX: -9999, rightX: -9999, y: -9999, active: false });
+    const scrollPosRef = useRef({ leftX: -9999, centerX: -9999, rightX: -9999, y: -9999, active: false });
 
-    // Central function to update all 3 mask gradients (1 for mouse, 2 for scroll)
+    // Central function to update all 4 mask gradients (1 for mouse, 3 for scroll: left, center, right)
     const updateMasks = useCallback(() => {
         const container = containerRef.current;
         if (!container) return;
@@ -31,26 +31,30 @@ export function RevealGrid({ children, className = "", maskSize = 220 }: RevealG
                 pos1 = `${mx - maskSize / 2}px ${my - maskSize / 2}px`;
             }
 
-            // 2. Scroll Left Mask & 3. Scroll Right Mask
+            // 2. Scroll Left | 3. Scroll Center | 4. Scroll Right
             let pos2 = "-9999px -9999px";
             let pos3 = "-9999px -9999px";
+            let pos4 = "-9999px -9999px";
             
             if (scrollPosRef.current.active) {
                 const cRect = container.getBoundingClientRect();
-                const globalLeftX = cRect.left + scrollPosRef.current.leftX;
-                const globalRightX = cRect.left + scrollPosRef.current.rightX;
-                const globalY = cRect.top + scrollPosRef.current.y;
+                const globalLeftX   = cRect.left + scrollPosRef.current.leftX;
+                const globalCenterX = cRect.left + scrollPosRef.current.centerX;
+                const globalRightX  = cRect.left + scrollPosRef.current.rightX;
+                const globalY       = cRect.top  + scrollPosRef.current.y;
 
-                const lx = globalLeftX - oRect.left;
-                const rx = globalRightX - oRect.left;
-                const sy = globalY - oRect.top;
+                const lx = globalLeftX   - oRect.left;
+                const cx = globalCenterX - oRect.left;
+                const rx = globalRightX  - oRect.left;
+                const sy = globalY       - oRect.top;
 
                 pos2 = `${lx - maskSize / 2}px ${sy - maskSize / 2}px`;
-                pos3 = `${rx - maskSize / 2}px ${sy - maskSize / 2}px`;
+                pos3 = `${cx - maskSize / 2}px ${sy - maskSize / 2}px`;
+                pos4 = `${rx - maskSize / 2}px ${sy - maskSize / 2}px`;
             }
 
-            overlay.style.webkitMaskPosition = `${pos1}, ${pos2}, ${pos3}`;
-            overlay.style.maskPosition       = `${pos1}, ${pos2}, ${pos3}`;
+            overlay.style.webkitMaskPosition = `${pos1}, ${pos2}, ${pos3}, ${pos4}`;
+            overlay.style.maskPosition       = `${pos1}, ${pos2}, ${pos3}, ${pos4}`;
             overlay.style.opacity            = (mousePosRef.current.active || scrollPosRef.current.active) ? "1" : "0";
         });
     }, [maskSize]);
@@ -85,31 +89,13 @@ export function RevealGrid({ children, className = "", maskSize = 220 }: RevealG
             if (v <= 0 || v >= 1) {
                 scrollPosRef.current.active = false;
             } else {
-                let leftX = 0;
-                let rightX = width;
-                let y = 0;
+                // All 3 spotlights travel straight down their borders simultaneously
+                const y       = v * height;
+                const leftX   = 0;          // left outer border
+                const centerX = width / 2;  // center vertical border
+                const rightX  = width;      // right outer border
 
-                if (v < 0.33) {
-                    // Segment 1: Travel DOWN the outer left and right borders
-                    const progress = v / 0.33;
-                    leftX = 0;
-                    rightX = width;
-                    y = progress * (height / 2);
-                } else if (v < 0.66) {
-                    // Segment 2: Turn INWARD along the center horizontal border (dividing line between top and bottom cards)
-                    const progress = (v - 0.33) / 0.33;
-                    leftX = progress * (width / 2);
-                    rightX = width - (progress * (width / 2));
-                    y = height / 2;
-                } else {
-                    // Segment 3: Travel DOWN the center vertical border together
-                    const progress = (v - 0.66) / 0.34;
-                    leftX = width / 2;
-                    rightX = width / 2;
-                    y = (height / 2) + (progress * (height / 2));
-                }
-                
-                scrollPosRef.current = { leftX, rightX, y, active: true };
+                scrollPosRef.current = { leftX, centerX, rightX, y, active: true };
             }
             updateMasks();
         });

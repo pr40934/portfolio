@@ -35,17 +35,17 @@ export function RevealCard({
                     border: `1px solid ${borderColor}`,
                     boxShadow: `0 0 24px 4px hsla(160, 84%, 55%, 0.9), inset 0 0 24px 4px hsla(160, 84%, 55%, 0.4), 0 0 8px 1px hsla(160, 84%, 55%, 1)`,
                     WebkitMaskImage:
-                        "radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%)",
+                        "radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%)",
                     maskImage:
-                        "radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%)",
-                    WebkitMaskSize: `${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px`,
-                    maskSize: `${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px`,
-                    WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat",
-                    maskRepeat: "no-repeat, no-repeat, no-repeat",
-                    WebkitMaskOrigin: "border-box, border-box, border-box",
-                    maskOrigin: "border-box, border-box, border-box",
-                    WebkitMaskPosition: "-9999px -9999px, -9999px -9999px, -9999px -9999px",
-                    maskPosition: "-9999px -9999px, -9999px -9999px, -9999px -9999px",
+                        "radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%), radial-gradient(circle closest-side, white 20%, transparent 100%)",
+                    WebkitMaskSize: `${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px`,
+                    maskSize: `${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px, ${maskSize}px ${maskSize}px`,
+                    WebkitMaskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
+                    maskRepeat: "no-repeat, no-repeat, no-repeat, no-repeat",
+                    WebkitMaskOrigin: "border-box, border-box, border-box, border-box",
+                    maskOrigin: "border-box, border-box, border-box, border-box",
+                    WebkitMaskPosition: "-9999px -9999px, -9999px -9999px, -9999px -9999px, -9999px -9999px",
+                    maskPosition: "-9999px -9999px, -9999px -9999px, -9999px -9999px, -9999px -9999px",
                 }}
             />
 
