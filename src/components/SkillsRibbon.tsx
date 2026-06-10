@@ -140,31 +140,34 @@ const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
 function getColorClasses(accent: string) {
     if (accent.includes('emerald')) {
         return {
-            border: 'border-emerald-500/25 hover:border-emerald-400/50',
-            dot: 'bg-emerald-500 shadow-[0_0_8px_#10b981]',
+            border: 'border-emerald-500/20 hover:border-emerald-400/50',
+            dot: 'bg-emerald-500 shadow-[0_0_12px_#10b981,0_0_20px_rgba(16,185,129,0.4)]',
             text: 'text-emerald-400',
-            bg: 'bg-[#020e08]/90 hover:bg-[#031c10]/95',
-            categoryBorder: 'border-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)]',
-            line: 'from-emerald-500/40 to-transparent'
+            bg: 'bg-emerald-950/25 hover:bg-emerald-950/40 border border-emerald-500/20 hover:border-emerald-400/50 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.3)]',
+            categoryBorder: 'border border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.25),inset_0_1px_2px_rgba(255,255,255,0.15)]',
+            categoryBg: 'bg-emerald-950/45 hover:bg-emerald-950/60 backdrop-blur-xl',
+            line: 'from-emerald-500/50 to-transparent'
         };
     } else if (accent.includes('teal')) {
         return {
-            border: 'border-teal-500/25 hover:border-teal-400/50',
-            dot: 'bg-teal-500 shadow-[0_0_8px_#14b8a6]',
+            border: 'border-teal-500/20 hover:border-teal-400/50',
+            dot: 'bg-teal-500 shadow-[0_0_12px_#14b8a6,0_0_20px_rgba(20,184,166,0.4)]',
             text: 'text-teal-400',
-            bg: 'bg-[#010e0c]/90 hover:bg-[#021d19]/95',
-            categoryBorder: 'border-teal-500 shadow-[0_0_12px_rgba(20,184,166,0.3)]',
-            line: 'from-teal-500/40 to-transparent'
+            bg: 'bg-teal-950/25 hover:bg-teal-950/40 border border-teal-500/20 hover:border-teal-400/50 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.3)]',
+            categoryBorder: 'border border-teal-500/40 shadow-[0_0_20px_rgba(20,184,166,0.25),inset_0_1px_2px_rgba(255,255,255,0.15)]',
+            categoryBg: 'bg-teal-950/45 hover:bg-teal-950/60 backdrop-blur-xl',
+            line: 'from-teal-500/50 to-transparent'
         };
     } else {
         // cyan
         return {
-            border: 'border-cyan-500/25 hover:border-cyan-400/50',
-            dot: 'bg-cyan-500 shadow-[0_0_8px_#06b6d4]',
+            border: 'border-cyan-500/20 hover:border-cyan-400/50',
+            dot: 'bg-cyan-500 shadow-[0_0_12px_#06b6d4,0_0_20px_rgba(6,182,212,0.4)]',
             text: 'text-cyan-400',
-            bg: 'bg-[#010e11]/90 hover:bg-[#021c22]/95',
-            categoryBorder: 'border-cyan-500 shadow-[0_0_12px_rgba(6,182,212,0.3)]',
-            line: 'from-cyan-500/40 to-transparent'
+            bg: 'bg-cyan-950/25 hover:bg-cyan-950/40 border border-cyan-500/20 hover:border-cyan-400/50 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.3)]',
+            categoryBorder: 'border border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.25),inset_0_1px_2px_rgba(255,255,255,0.15)]',
+            categoryBg: 'bg-cyan-950/45 hover:bg-cyan-950/60 backdrop-blur-xl',
+            line: 'from-cyan-500/50 to-transparent'
         };
     }
 }
@@ -203,22 +206,58 @@ export function SkillsRibbon() {
                             <stop offset="70%" stopColor="#06b6d4" />
                             <stop offset="100%" stopColor="#3b82f6" />
                         </linearGradient>
+                        <filter id="ribbonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="4" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
                     </defs>
-                    {/* Background track */}
+                    
+                    {/* Background track (Thick translucent glass track) */}
                     <path 
                         d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
                         fill="none" 
-                        stroke="rgba(255,255,255,0.03)" 
-                        strokeWidth="1.5"
+                        stroke="rgba(255, 255, 255, 0.05)" 
+                        strokeWidth="14"
                         vectorEffect="non-scaling-stroke"
+                        strokeLinecap="round"
                     />
-                    {/* Animated colored ribbon */}
+                    
+                    {/* Background Neon Aura (Animated, glow blurred) */}
                     <motion.path 
                         d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
                         fill="none" 
                         stroke="url(#vertRibbonGrad)" 
-                        strokeWidth="3.5"
+                        strokeWidth="20"
+                        opacity="0.15"
                         vectorEffect="non-scaling-stroke"
+                        strokeLinecap="round"
+                        style={{ pathLength: scrollYProgress }}
+                        filter="url(#ribbonGlow)"
+                    />
+
+                    {/* Main Core Ribbon (Animated, colored glass glow) */}
+                    <motion.path 
+                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
+                        fill="none" 
+                        stroke="url(#vertRibbonGrad)" 
+                        strokeWidth="8"
+                        opacity="0.8"
+                        vectorEffect="non-scaling-stroke"
+                        strokeLinecap="round"
+                        style={{ pathLength: scrollYProgress }}
+                    />
+
+                    {/* Ribbon Specular Edge Reflection (Animated, white glass sheen) */}
+                    <motion.path 
+                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
+                        fill="none" 
+                        stroke="rgba(255, 255, 255, 0.45)" 
+                        strokeWidth="1.5"
+                        vectorEffect="non-scaling-stroke"
+                        strokeLinecap="round"
                         style={{ pathLength: scrollYProgress }}
                     />
                 </svg>
@@ -239,7 +278,7 @@ export function SkillsRibbon() {
                             {/* The Dot on the Ribbon */}
                             <div className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-20 transition-all duration-300 pointer-events-auto ${
                                 node.type === 'category'
-                                    ? `${colors.dot} w-3 h-3 md:w-4 md:h-4`
+                                    ? `${colors.dot} w-3 h-3 md:w-4.5 md:h-4.5`
                                     : `${colors.dot} w-1.5 h-1.5 md:w-2 md:h-2 opacity-80 hover:opacity-100`
                             }`} />
 
@@ -251,27 +290,27 @@ export function SkillsRibbon() {
                                 transition={{ type: "spring", stiffness: 100, damping: 15 }}
                                 className={`absolute flex items-center -translate-y-1/2 pointer-events-auto ${
                                     isLeft
-                                        ? 'right-[6px] md:right-[10px] flex-row-reverse text-right'
-                                        : 'left-[6px] md:left-[10px] flex-row text-left'
+                                        ? 'right-[8px] md:right-[14px] flex-row-reverse text-right'
+                                        : 'left-[8px] md:left-[14px] flex-row text-left'
                                 }`}
                             >
                                 {/* Connector Line */}
-                                <div className={`h-[1px] w-3 md:w-6 flex-shrink-0 bg-gradient-to-r ${
+                                <div className={`h-[1px] w-3 md:w-8 flex-shrink-0 bg-gradient-to-r ${
                                     isLeft 
-                                        ? 'bg-gradient-to-l rotate-0' 
+                                        ? 'bg-gradient-to-l' 
                                         : 'bg-gradient-to-r'
                                 } ${colors.line}`} />
 
                                 {/* Badge */}
                                 {node.type === 'category' ? (
-                                    <div className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-Case text-white flex items-center gap-2 border ${colors.bg} ${colors.categoryBorder} backdrop-blur-md hover:scale-105 transition-transform duration-300`}>
+                                    <div className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-Case text-white flex items-center gap-2 ${colors.categoryBg} ${colors.categoryBorder} hover:scale-105 transition-transform duration-300`}>
                                         {node.icon && <node.icon className={`w-3.5 h-3.5 md:w-4 md:h-4 ${colors.text}`} />}
                                         <span className="text-[10px] md:text-[12px] font-bold uppercase tracking-wider whitespace-nowrap">
                                             {node.text}
                                         </span>
                                     </div>
                                 ) : (
-                                    <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-md font-Case text-white/90 text-[9px] md:text-[11px] border ${colors.bg} ${colors.border} backdrop-blur-md shadow-md hover:text-white hover:scale-105 transition-all duration-300`}>
+                                    <div className={`px-2 py-1 md:px-3 md:py-1.5 rounded-md font-Case text-white/95 text-[9px] md:text-[11px] ${colors.bg} hover:text-white hover:scale-105 transition-all duration-300`}>
                                         <span className="whitespace-nowrap font-medium">
                                             {node.text}
                                         </span>
