@@ -23,7 +23,7 @@ interface SkillNode {
 }
 
 // Cubic Bezier curve control points corresponding to the SVG path below
-const BEZIER_CURVES: [ [number, number], [number, number], [number, number], [number, number] ][] = [
+const BEZIER_CURVES: [[number, number], [number, number], [number, number], [number, number]][] = [
     [[-10, 100], [40, 100], [60, 100], [60, 200]],
     [[60, 200], [60, 350], [20, 350], [20, 500]],
     [[20, 500], [20, 650], [80, 650], [80, 800]],
@@ -63,7 +63,7 @@ function getPointForY(yTarget: number): [number, number] {
         { start: 1300, end: 1500 },
         { start: 1500, end: 1800 }
     ];
-    
+
     let segmentIdx = 0;
     for (let i = 0; i < 7; i++) {
         if (yTarget >= segmentYRanges[i].start && yTarget <= segmentYRanges[i].end) {
@@ -72,14 +72,14 @@ function getPointForY(yTarget: number): [number, number] {
         }
         if (i === 6) segmentIdx = 6;
     }
-    
+
     const curve = BEZIER_CURVES[segmentIdx];
-    
+
     // Binary search for t in [0, 1] to match yTarget
     let low = 0;
     let high = 1;
     let x = 0;
-    
+
     for (let iter = 0; iter < 12; iter++) {
         const mid = (low + high) / 2;
         const pt = getBezierPoint(mid, curve[0], curve[1], curve[2], curve[3]);
@@ -91,7 +91,7 @@ function getPointForY(yTarget: number): [number, number] {
             high = mid;
         }
     }
-    
+
     return [x, yTarget];
 }
 
@@ -126,7 +126,7 @@ const yRange = yEnd - yStart;
 
 const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
     let yTarget = yStart + (index / (FLATTENED_SKILLS.length - 1)) * yRange;
-    
+
     // Compress the Y spacing for the last few nodes (Data Systems) 
     // because the curve is nearly horizontal here, which would otherwise 
     // cause huge physical gaps between the dots.
@@ -136,9 +136,9 @@ const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
     if (index === 42) yTarget -= 64; // Supabase
 
     const [x, y] = getPointForY(yTarget);
-    
+
     let isLeft = x > 50; // if curve is on right half, put badge on left side of curve
-    
+
     // User requested these specific skills to have their badges on the right side
     if (index >= 40 && index <= 42) {
         isLeft = false;
@@ -191,7 +191,7 @@ function getColorClasses(accent: string) {
 
 export function SkillsRibbon() {
     const containerRef = useRef<HTMLDivElement>(null);
-    
+
     // Ribbon draws as you scroll down the container
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -199,11 +199,11 @@ export function SkillsRibbon() {
     });
 
     // Mask height grows as you scroll to progressively reveal the beam
-    const maskHeight = useTransform(scrollYProgress, [0, 1], [0, 1800]);
+    const maskHeight = useTransform(scrollYProgress, [0, 1], [0, 1890]);
 
     return (
         <section ref={containerRef} className="relative w-full max-w-6xl mx-auto bg-black/0 z-20 mt-12 mb-32 h-[2600px] md:h-[3600px]">
-            
+
             {/* Headers (Left aligned to match ExperienceSection) */}
             <div className="absolute top-[2%] md:top-[3%] left-0 w-full z-30 pointer-events-none px-6 md:px-12">
                 <div className="flex flex-col gap-1 md:gap-2 max-w-7xl mx-auto">
@@ -233,26 +233,29 @@ export function SkillsRibbon() {
                                 <feMergeNode in="SourceGraphic" />
                             </feMerge>
                         </filter>
+                        <filter id="maskBlur" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="5" />
+                        </filter>
                         <mask id="beamRevealMask">
-                            <motion.rect x="-20" y="0" width="140" fill="white" style={{ height: maskHeight }} />
+                            <motion.rect x="-20" y="-10" width="140" fill="white" style={{ height: maskHeight }} filter="url(#maskBlur)" />
                         </mask>
                     </defs>
-                    
+
                     {/* Background track (light streak - always visible) */}
-                    <path 
+                    <path
                         d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1650, 110 1650, 120 1800"
-                        fill="none" 
-                        stroke="rgba(255, 255, 255, 0.05)" 
+                        fill="none"
+                        stroke="rgba(255, 255, 255, 0.05)"
                         strokeWidth="14"
                         vectorEffect="non-scaling-stroke"
                         strokeLinecap="round"
                     />
-                    
+
                     {/* Green beam - fixed width, progressively revealed by mask */}
-                    <path 
+                    <path
                         d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1650, 110 1650, 120 1800"
-                        fill="none" 
-                        stroke="url(#vertRibbonGrad)" 
+                        fill="none"
+                        stroke="url(#vertRibbonGrad)"
                         strokeWidth="8"
                         opacity="0.8"
                         vectorEffect="non-scaling-stroke"
@@ -275,11 +278,10 @@ export function SkillsRibbon() {
                             style={{ top: `${node.topPercent}%`, left: `${node.leftPercent}%` }}
                         >
                             {/* The Dot on the Ribbon */}
-                            <div className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-20 transition-all duration-300 pointer-events-auto ${
-                                node.type === 'category'
+                            <div className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-20 transition-all duration-300 pointer-events-auto ${node.type === 'category'
                                     ? `${colors.dot} w-3 h-3 md:w-4.5 md:h-4.5`
                                     : `${colors.dot} w-1.5 h-1.5 md:w-2 md:h-2 opacity-80 hover:opacity-100`
-                            }`} />
+                                }`} />
 
                             {/* The Badge Container (Left or Right based on curve x position) */}
                             <motion.div
@@ -287,18 +289,16 @@ export function SkillsRibbon() {
                                 whileInView={{ opacity: 1, x: 0, scale: 1 }}
                                 viewport={{ once: false, amount: 0.1, margin: "-10%" }}
                                 transition={{ type: "spring", stiffness: 100, damping: 15 }}
-                                className={`absolute flex items-center -translate-y-1/2 pointer-events-auto ${
-                                    isLeft
+                                className={`absolute flex items-center -translate-y-1/2 pointer-events-auto ${isLeft
                                         ? 'right-[8px] md:right-[14px] flex-row-reverse text-right'
                                         : 'left-[8px] md:left-[14px] flex-row text-left'
-                                }`}
+                                    }`}
                             >
                                 {/* Connector Line */}
-                                <div className={`h-[1px] w-3 md:w-8 flex-shrink-0 bg-gradient-to-r ${
-                                    isLeft 
-                                        ? 'bg-gradient-to-l' 
+                                <div className={`h-[1px] w-3 md:w-8 flex-shrink-0 bg-gradient-to-r ${isLeft
+                                        ? 'bg-gradient-to-l'
                                         : 'bg-gradient-to-r'
-                                } ${colors.line}`} />
+                                    } ${colors.line}`} />
 
                                 {/* Badge */}
                                 {node.type === 'category' ? (
