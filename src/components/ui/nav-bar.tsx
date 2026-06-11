@@ -1,24 +1,62 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// ── Smooth scroll + close after arrival ─────────────────────────────────────
+function scrollToSectionThenClose(href: string, onClose?: () => void) {
+  if (!href.startsWith("#")) {
+    window.open(href, "_blank", "noreferrer");
+    onClose?.();
+    return;
+  }
+  const id = href.slice(1);
+  const el = document.getElementById(id);
+  if (!el) return;
 
+  // Scroll immediately — no delay
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Close the menu once the target section enters the viewport
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        observer.disconnect();
+        clearTimeout(fallback);
+        onClose?.();
+      }
+    },
+    { threshold: 0.1 }
+  );
+  observer.observe(el);
+
+  // Safety fallback: close after 700ms if the observer never fires
+  const fallback = setTimeout(() => {
+    observer.disconnect();
+    onClose?.();
+  }, 700);
+}
 
 // ── Hover lift link ───────────────────────────────────────────────────────────
 function HoverLink({
   href,
   children,
-  onClick,
+  onClose,
   className = "",
 }: {
   href: string;
   children: string;
-  onClick?: () => void;
+  onClose?: () => void;
   className?: string;
 }) {
   const letters = children.split("");
 
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    // Scroll first, menu closes once the section is in view
+    scrollToSectionThenClose(href, onClose);
+  };
+
   return (
-    <a href={href} onClick={onClick} className={`group block ${className}`}>
+    <a href={href} onClick={handleClick} className={`group block ${className}`}>
       <span className="relative flex overflow-hidden">
         <span className="flex">
           {letters.map((letter, i) => (
@@ -87,7 +125,9 @@ const itemVariants = {
 // ── NavBar ────────────────────────────────────────────────────────────────────
 export const NavBar = () => {
   const [open, setOpen] = useState(false);
-  const [scrollPct, setScrollPct] = useState(0);
+  // Use a ref to update scroll % directly in the DOM — avoids re-renders
+  // that would trigger Framer Motion's `layout` animation on every scroll frame
+  const scrollPctRef = useRef<HTMLSpanElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -96,12 +136,15 @@ export const NavBar = () => {
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
       const pct = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100);
-      setScrollPct(isNaN(pct) ? 0 : Math.min(100, Math.max(0, pct)));
+      const val = isNaN(pct) ? 0 : Math.min(100, Math.max(0, pct));
+      if (scrollPctRef.current) {
+        scrollPctRef.current.textContent = `${val}%`;
+      }
     };
-    
+
     // Initialize once
     onScroll();
-    
+
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -123,14 +166,10 @@ export const NavBar = () => {
     { label: "Experience", href: "#experience" },
     { label: "Skills", href: "#skills" },
   ];
-  const otherLinks = [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Cookie Policy", href: "#" },
-  ];
   const socialLinks = [
     { label: "Github", href: "https://github.com/Pratap-Digistashing" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/pratap-raju/" },
+    { label: "WhatsApp", href: "https://wa.me/918688659066" },
   ];
 
   return (
@@ -196,10 +235,13 @@ export const NavBar = () => {
 
 
 
-            {/* Scroll % */}
+            {/* Scroll % — updated via ref, not state, to avoid layout re-renders */}
             <div className="mx-1.5 h-7 w-14 bg-black rounded-full flex items-center justify-center">
-              <span className="text-[11px] font-Turbine font-black tracking-[0.15em] text-white tabular-nums">
-                {scrollPct}%
+              <span
+                ref={scrollPctRef}
+                className="text-[11px] font-Turbine font-black tracking-[0.15em] text-white tabular-nums"
+              >
+                0%
               </span>
             </div>
           </div>
@@ -220,7 +262,7 @@ export const NavBar = () => {
                 <p className="text-[10px] font-Turbine tracking-[0.3em] text-black/40 uppercase mb-4">Menu</p>
                 <nav className="flex flex-col">
                   {navLinks.map((link) => (
-                    <HoverLink key={link.href} href={link.href} onClick={close}
+                    <HoverLink key={link.href} href={link.href} onClose={close}
                       className="text-[1.75rem] font-Case font-bold text-[#052415] py-1 leading-tight">
                       {link.label}
                     </HoverLink>
@@ -228,29 +270,12 @@ export const NavBar = () => {
                 </nav>
               </motion.div>
 
-              <motion.div variants={itemVariants} className="h-px bg-black/10" />
-
-              {/* Other */}
-              <motion.div variants={itemVariants} className="px-7 pt-5 pb-5">
-                <p className="text-[10px] font-Turbine tracking-[0.3em] text-black/40 uppercase mb-3">Other</p>
-                <div className="flex flex-col gap-1">
-                  {otherLinks.map((link) => (
-                    <HoverLink key={link.label} href={link.href} onClick={close}
-                      className="text-sm font-Case font-bold text-[#052415] py-0.5 leading-tight">
-                      {link.label}
-                    </HoverLink>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="h-px bg-black/10" />
-
               {/* Social */}
               <motion.div variants={itemVariants} className="px-7 pt-5 pb-7">
                 <p className="text-[10px] font-Turbine tracking-[0.3em] text-black/40 uppercase mb-3">Social media</p>
                 <div className="flex flex-col gap-1">
                   {socialLinks.map((link) => (
-                    <HoverLink key={link.href} href={link.href} onClick={close}
+                    <HoverLink key={link.href} href={link.href} onClose={close}
                       className="text-sm font-Case font-bold text-[#052415] py-0.5 leading-tight">
                       {link.label}
                     </HoverLink>
