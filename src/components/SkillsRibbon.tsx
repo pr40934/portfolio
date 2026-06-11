@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Cpu, MonitorSmartphone, Cloud, Settings, Key, Database } from "lucide-react";
 
 // Original SKILLS_DATA
@@ -9,7 +9,7 @@ const SKILLS_DATA = [
     { id: "devops", titleLine1: "Cloud", titleLine2: "& DevOps", icon: Cloud, skills: ["AWS S3", "CloudFront", "EC2 Linux", "PM2", "Docker", "Windows Server"], accent: "bg-cyan-600", shadow: "shadow-cyan-500/20" },
     { id: "tools", titleLine1: "Tooling", titleLine2: "& AI", icon: Settings, skills: ["Postman", "GIT", "Jira", "Claude", "Cursor IDE", "GitHub Actions"], accent: "bg-emerald-500", shadow: "shadow-emerald-500/20" },
     { id: "auth", titleLine1: "Auth", titleLine2: "& Security", icon: Key, skills: ["JWT", "OAuth2", "Session Auth", "Django Auth", "Security"], accent: "bg-teal-500", shadow: "shadow-teal-500/20" },
-    { id: "database", titleLine1: "Data", titleLine2: "Systems", icon: Database, skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Supabase"], accent: "bg-cyan-500", shadow: "shadow-cyan-500/20" },
+    { id: "database", titleLine1: "Data", titleLine2: "Systems", icon: Database, skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis"], accent: "bg-cyan-500", shadow: "shadow-cyan-500/20" },
 ] as const;
 
 // Flattened node structure
@@ -23,14 +23,14 @@ interface SkillNode {
 }
 
 // Cubic Bezier curve control points corresponding to the SVG path below
-const BEZIER_CURVES: [ [number, number], [number, number], [number, number], [number, number] ][] = [
+const BEZIER_CURVES: [[number, number], [number, number], [number, number], [number, number]][] = [
     [[-10, 100], [40, 100], [60, 100], [60, 200]],
     [[60, 200], [60, 350], [20, 350], [20, 500]],
     [[20, 500], [20, 650], [80, 650], [80, 800]],
     [[80, 800], [80, 950], [40, 950], [40, 1100]],
     [[40, 1100], [40, 1200], [70, 1200], [70, 1300]],
     [[70, 1300], [70, 1400], [15, 1400], [15, 1500]],
-    [[15, 1500], [15, 1550], [110, 1550], [120, 1600]]
+    [[15, 1500], [15, 1650], [110, 1650], [120, 1800]]
 ];
 
 // Helper to evaluate a cubic bezier curve at parameter t [0, 1]
@@ -61,9 +61,9 @@ function getPointForY(yTarget: number): [number, number] {
         { start: 800, end: 1100 },
         { start: 1100, end: 1300 },
         { start: 1300, end: 1500 },
-        { start: 1500, end: 1600 }
+        { start: 1500, end: 1800 }
     ];
-    
+
     let segmentIdx = 0;
     for (let i = 0; i < 7; i++) {
         if (yTarget >= segmentYRanges[i].start && yTarget <= segmentYRanges[i].end) {
@@ -72,14 +72,14 @@ function getPointForY(yTarget: number): [number, number] {
         }
         if (i === 6) segmentIdx = 6;
     }
-    
+
     const curve = BEZIER_CURVES[segmentIdx];
-    
+
     // Binary search for t in [0, 1] to match yTarget
     let low = 0;
     let high = 1;
     let x = 0;
-    
+
     for (let iter = 0; iter < 12; iter++) {
         const mid = (low + high) / 2;
         const pt = getBezierPoint(mid, curve[0], curve[1], curve[2], curve[3]);
@@ -91,7 +91,7 @@ function getPointForY(yTarget: number): [number, number] {
             high = mid;
         }
     }
-    
+
     return [x, yTarget];
 }
 
@@ -121,19 +121,76 @@ SKILLS_DATA.forEach((cat) => {
 
 // Map items to coordinates along the path with even Y spacing
 const yStart = 140;
-const yEnd = 1550;
+const yEnd = 1750;
 const yRange = yEnd - yStart;
 
 const SKILL_NODES_WITH_POSITIONS = FLATTENED_SKILLS.map((item, index) => {
-    const yTarget = yStart + (index / (FLATTENED_SKILLS.length - 1)) * yRange;
+    let yTarget = yStart + (index / (FLATTENED_SKILLS.length - 1)) * yRange;
+
+    // Compress the Y spacing for the last few nodes (Data Systems) 
+    // because the curve is nearly horizontal here, which would otherwise 
+    // cause huge physical gaps between the dots.
+    if (index === 39) yTarget -= 10; // MySQL
+    if (index === 40) yTarget -= 28; // MongoDB
+    if (index === 41) yTarget -= 46; // Redis
+    if (index === 42) yTarget -= 64; // Supabase
+
     const [x, y] = getPointForY(yTarget);
+
+    let isLeft = x > 50; // if curve is on right half, put badge on left side of curve
+
+    // User requested these specific skills to have their badges on the right side
+    if (index === 42) {
+        isLeft = false;
+    }
+
+    // Celery, REST, GraphQL, Supabase (Backend skills, indices 5–8 in flattened list)
+    if (index >= 5 && index <= 8) {
+        isLeft = true;
+    }
+
+    // All Frontend Mastery skills (indices 10–16) → left side (excluding heading at 9)
+    if (index >= 10 && index <= 16) {
+        isLeft = true;
+    }
+
+    // Windows Server (DevOps, index 23)
+    if (index === 23) {
+        isLeft = true;
+    }
+
+    // Docker (DevOps, index 22)
+    if (index === 22) {
+        isLeft = true;
+    }
+
+    // Claude, Cursor IDE, GitHub Actions (Tools & AI, indices 28–30)
+    if (index >= 28 && index <= 30) {
+        isLeft = false;
+    }
+
+    // Jira (Tools & AI, index 27)
+    if (index === 27) {
+        isLeft = false;
+    }
+
+    // JWT (Auth & Security, index 32)
+    if (index === 32) {
+        isLeft = false;
+    }
+
+    // PostgreSQL, MySQL, MongoDB, Redis (Data Systems, indices 38–41)
+    if (index >= 38 && index <= 41) {
+        isLeft = true;
+    }
+
     return {
         ...item,
         x,
         y,
-        topPercent: (y / 1600) * 100,
+        topPercent: (y / 1800) * 100,
         leftPercent: x,
-        isLeft: x > 50 // if curve is on right half, put badge on left side of curve
+        isLeft
     };
 });
 
@@ -174,16 +231,19 @@ function getColorClasses(accent: string) {
 
 export function SkillsRibbon() {
     const containerRef = useRef<HTMLDivElement>(null);
-    
+
     // Ribbon draws as you scroll down the container
     const { scrollYProgress } = useScroll({
         target: containerRef,
-        offset: ["start center", "end center"] 
+        offset: ["start end", "end start"]
     });
+
+    // Mask height grows as you scroll to progressively reveal the beam
+    const maskHeight = useTransform(scrollYProgress, [0, 1], [0, 1890]);
 
     return (
         <section ref={containerRef} className="relative w-full max-w-6xl mx-auto bg-black/0 z-20 mt-12 mb-32 h-[2600px] md:h-[3600px]">
-            
+
             {/* Headers (Left aligned to match ExperienceSection) */}
             <div className="absolute top-[2%] md:top-[3%] left-0 w-full z-30 pointer-events-none px-6 md:px-12">
                 <div className="flex flex-col gap-1 md:gap-2 max-w-7xl mx-auto">
@@ -198,7 +258,7 @@ export function SkillsRibbon() {
 
             {/* SVG Snaking Ribbon */}
             <div className="absolute inset-0 w-full h-full pointer-events-none">
-                <svg viewBox="0 0 100 1600" preserveAspectRatio="none" className="w-full h-full overflow-visible">
+                <svg viewBox="0 0 100 1800" preserveAspectRatio="none" className="w-full h-full overflow-visible">
                     <defs>
                         <linearGradient id="vertRibbonGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="#10b981" />
@@ -213,52 +273,34 @@ export function SkillsRibbon() {
                                 <feMergeNode in="SourceGraphic" />
                             </feMerge>
                         </filter>
+                        <filter id="maskBlur" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="5" />
+                        </filter>
+                        <mask id="beamRevealMask">
+                            <motion.rect x="-20" y="-10" width="140" fill="white" style={{ height: maskHeight }} filter="url(#maskBlur)" />
+                        </mask>
                     </defs>
-                    
-                    {/* Background track (Thick translucent glass track) */}
-                    <path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
-                        fill="none" 
-                        stroke="rgba(255, 255, 255, 0.05)" 
+
+                    {/* Background track (light streak - always visible) */}
+                    <path
+                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1650, 110 1650, 120 1800"
+                        fill="none"
+                        stroke="rgba(255, 255, 255, 0.05)"
                         strokeWidth="14"
                         vectorEffect="non-scaling-stroke"
                         strokeLinecap="round"
                     />
-                    
-                    {/* Background Neon Aura (Animated, glow blurred) */}
-                    <motion.path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
-                        fill="none" 
-                        stroke="url(#vertRibbonGrad)" 
-                        strokeWidth="20"
-                        opacity="0.15"
-                        vectorEffect="non-scaling-stroke"
-                        strokeLinecap="round"
-                        style={{ pathLength: scrollYProgress }}
-                        filter="url(#ribbonGlow)"
-                    />
 
-                    {/* Main Core Ribbon (Animated, colored glass glow) */}
-                    <motion.path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
-                        fill="none" 
-                        stroke="url(#vertRibbonGrad)" 
+                    {/* Green beam - fixed width, progressively revealed by mask */}
+                    <path
+                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1650, 110 1650, 120 1800"
+                        fill="none"
+                        stroke="url(#vertRibbonGrad)"
                         strokeWidth="8"
                         opacity="0.8"
                         vectorEffect="non-scaling-stroke"
                         strokeLinecap="round"
-                        style={{ pathLength: scrollYProgress }}
-                    />
-
-                    {/* Ribbon Specular Edge Reflection (Animated, white glass sheen) */}
-                    <motion.path 
-                        d="M -10 100 C 40 100, 60 100, 60 200 C 60 350, 20 350, 20 500 C 20 650, 80 650, 80 800 C 80 950, 40 950, 40 1100 C 40 1200, 70 1200, 70 1300 C 70 1400, 15 1400, 15 1500 C 15 1550, 110 1550, 120 1600"
-                        fill="none" 
-                        stroke="rgba(255, 255, 255, 0.45)" 
-                        strokeWidth="1.5"
-                        vectorEffect="non-scaling-stroke"
-                        strokeLinecap="round"
-                        style={{ pathLength: scrollYProgress }}
+                        mask="url(#beamRevealMask)"
                     />
                 </svg>
             </div>
@@ -276,11 +318,10 @@ export function SkillsRibbon() {
                             style={{ top: `${node.topPercent}%`, left: `${node.leftPercent}%` }}
                         >
                             {/* The Dot on the Ribbon */}
-                            <div className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-20 transition-all duration-300 pointer-events-auto ${
-                                node.type === 'category'
+                            <div className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full z-20 transition-all duration-300 pointer-events-auto ${node.type === 'category'
                                     ? `${colors.dot} w-3 h-3 md:w-4.5 md:h-4.5`
                                     : `${colors.dot} w-1.5 h-1.5 md:w-2 md:h-2 opacity-80 hover:opacity-100`
-                            }`} />
+                                }`} />
 
                             {/* The Badge Container (Left or Right based on curve x position) */}
                             <motion.div
@@ -288,18 +329,16 @@ export function SkillsRibbon() {
                                 whileInView={{ opacity: 1, x: 0, scale: 1 }}
                                 viewport={{ once: false, amount: 0.1, margin: "-10%" }}
                                 transition={{ type: "spring", stiffness: 100, damping: 15 }}
-                                className={`absolute flex items-center -translate-y-1/2 pointer-events-auto ${
-                                    isLeft
+                                className={`absolute flex items-center -translate-y-1/2 pointer-events-auto ${isLeft
                                         ? 'right-[8px] md:right-[14px] flex-row-reverse text-right'
                                         : 'left-[8px] md:left-[14px] flex-row text-left'
-                                }`}
+                                    }`}
                             >
                                 {/* Connector Line */}
-                                <div className={`h-[1px] w-3 md:w-8 flex-shrink-0 bg-gradient-to-r ${
-                                    isLeft 
-                                        ? 'bg-gradient-to-l' 
+                                <div className={`h-[1px] w-3 md:w-8 flex-shrink-0 bg-gradient-to-r ${isLeft
+                                        ? 'bg-gradient-to-l'
                                         : 'bg-gradient-to-r'
-                                } ${colors.line}`} />
+                                    } ${colors.line}`} />
 
                                 {/* Badge */}
                                 {node.type === 'category' ? (
